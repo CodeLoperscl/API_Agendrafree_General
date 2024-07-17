@@ -32,7 +32,7 @@ export const postNacionalidad = async (req: Request, res: Response) => {
 
     if (existeNacionalidad) {
         return res.status(400).json({
-        msg: "Ya existe un nacionalidad con este nombre " + nombre,
+        msg: "Ya existe esta nacionalidad con este nombre " + nombre,
         });
     }
 
