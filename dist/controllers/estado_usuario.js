@@ -36,7 +36,7 @@ const getEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
     else {
         res.status(404).json({
-            msg: `No existe el estado_usuario con la id ${id}`,
+            msg: `No existe el estado usuario con la id ${id}`,
         });
     }
 });

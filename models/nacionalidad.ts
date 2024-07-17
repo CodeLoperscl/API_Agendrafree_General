@@ -9,9 +9,5 @@ const Nacionalidades = db.define("nacionalidades", {
         type: DataTypes.BOOLEAN,
     },
 });
-Nacionalidades.prototype.toJSON = function () {
-    var values = Object.assign({}, this.get());
 
-    return values;
-};
 export default Nacionalidades;

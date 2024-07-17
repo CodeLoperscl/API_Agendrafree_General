@@ -1,4 +1,4 @@
-import Nacionalidades from "../models/nacionalidades";
+import Nacionalidades from "../models/nacionalidad";
 import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
 

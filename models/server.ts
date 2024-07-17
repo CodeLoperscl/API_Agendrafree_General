@@ -1,11 +1,19 @@
 import express, { Application } from "express";
 import db from "../BD/connection";
+import db_especialista from "../BD/connection_agenda_especialista";
 import userRoutes from "../rutas/usuario";
 import authRoutes from "../rutas/auth";
 import personaRoutes from "../rutas/persona";
 import nacionalidadRoutes from "../rutas/nacionalidades";
 import estado_usuarioRoutes from "../rutas/estado_usuario";
+import pacienteRoutes from "../rutas/paciente";
+import citaRoutes from "../rutas/cita";
+import estado_citaRoutes from "../rutas/estado_cita";
+import especialistaRoutes from "../rutas/especialista";
+import previsiontaRoutes from "../rutas/prevision";
+import hora_disponibleRoutes from "../rutas/hora_disponible";
 
+import { syncModels } from "./index";
 
 import cors from "cors";
 
@@ -18,20 +26,40 @@ class Server {
     persona: "/api/persona",
     nacionalidad: "/api/nacionalidad",
     estado_usuario: "/api/estado_usuario",
+    paciente: "/api/paciente",
+    cita: "/api/cita",
+    estado_cita: "/api/estado_cita",
+    especialista: "/api/especialista",
+    prevision: "/api/prevision",
+    hora_disponible: "/api/hora_disponible",
   };
 
   constructor() {
     this.app = express();
     this.port = process.env.PORT || "8000";
     this.bdConnection();
+    this.bdConnection_especialista();
     this.middlewares();
     this.routes();
+    this.routes_bd_especialista();
+    
   }
 
   async bdConnection() {
     try {
       await db.authenticate();
       console.log("Database Online");
+      await syncModels();
+    } catch (error: any) {
+      throw new Error(error);
+    }
+  }
+
+  async bdConnection_especialista() {
+    try {
+      await db_especialista.authenticate();
+      console.log("Base de dato especialista online");
+      await syncModels();
     } catch (error: any) {
       throw new Error(error);
     }
@@ -49,6 +77,16 @@ class Server {
     this.app.use(this.apiPath.persona, personaRoutes);
     this.app.use(this.apiPath.nacionalidad, nacionalidadRoutes);
     this.app.use(this.apiPath.estado_usuario, estado_usuarioRoutes);
+  }
+
+  routes_bd_especialista(){
+    this.app.use(this.apiPath.paciente, pacienteRoutes);
+    this.app.use(this.apiPath.cita, citaRoutes);
+    this.app.use(this.apiPath.estado_cita, estado_citaRoutes);
+    this.app.use(this.apiPath.especialista, especialistaRoutes);
+    this.app.use(this.apiPath.prevision, previsiontaRoutes);
+    this.app.use(this.apiPath.hora_disponible, hora_disponibleRoutes);
+    
 
 
 

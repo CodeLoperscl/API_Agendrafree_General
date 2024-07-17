@@ -13,15 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteNacionalidad = exports.putNacionalidad = exports.postNacionalidad = exports.getNacionalidad = exports.getNacionalidades = void 0;
-const nacionalidades_1 = __importDefault(require("../models/nacionalidades"));
+const nacionalidad_1 = __importDefault(require("../models/nacionalidad"));
 const getNacionalidades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const nacionalidades = yield nacionalidades_1.default.findAll();
+    const nacionalidades = yield nacionalidad_1.default.findAll();
     res.json({ nacionalidades });
 });
 exports.getNacionalidades = getNacionalidades;
 const getNacionalidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const nacionalidad = yield nacionalidades_1.default.findByPk(id);
+    const nacionalidad = yield nacionalidad_1.default.findByPk(id);
     if (nacionalidad) {
         res.json(nacionalidad);
     }
@@ -36,17 +36,17 @@ const postNacionalidad = (req, res) => __awaiter(void 0, void 0, void 0, functio
     const { body } = req;
     const { nombre } = body;
     try {
-        const existeNacionalidad = yield nacionalidades_1.default.findOne({
+        const existeNacionalidad = yield nacionalidad_1.default.findOne({
             where: {
                 nombre,
             },
         });
         if (existeNacionalidad) {
             return res.status(400).json({
-                msg: "Ya existe un nacionalidad con este nombre " + nombre,
+                msg: "Ya existe esta nacionalidad con este nombre " + nombre,
             });
         }
-        const nacionalidad = yield nacionalidades_1.default.create({ nombre });
+        const nacionalidad = yield nacionalidad_1.default.create({ nombre });
         // res.json(psswd);
         res.json(nacionalidad);
     }
@@ -62,7 +62,7 @@ const putNacionalidad = (req, res) => __awaiter(void 0, void 0, void 0, function
     const { id } = req.params;
     const { body } = req;
     try {
-        const nacionalidad = yield nacionalidades_1.default.findByPk(id);
+        const nacionalidad = yield nacionalidad_1.default.findByPk(id);
         if (!nacionalidad) {
             return res.status(404).json({
                 msg: "No existe un nacionalidad con el id " + id,
@@ -81,7 +81,7 @@ const putNacionalidad = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.putNacionalidad = putNacionalidad;
 const deleteNacionalidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const nacionalidad = yield nacionalidades_1.default.findByPk(id);
+    const nacionalidad = yield nacionalidad_1.default.findByPk(id);
     if (!nacionalidad) {
         return res.status(404).json({
             msg: "No existe un nacionalidad con el id " + id,

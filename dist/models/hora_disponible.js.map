@@ -1,0 +1,1 @@
+{"version":3,"file":"hora_disponible.js","sourceRoot":"","sources":["../../models/hora_disponible.ts"],"names":[],"mappings":";;;;;AAAA,yCAAsC;AACtC,0GAAmE;AAEnE,MAAM,eAAe,GAAG,wCAAe,CAAC,MAAM,CAAC,mBAAmB,EAAE;IAClE,eAAe,EAAE;QACf,IAAI,EAAE,qBAAS,CAAC,OAAO;KACxB;IACD,IAAI,EAAE;QACJ,IAAI,EAAE,qBAAS,CAAC,IAAI;KACrB;CAEF,CAAC,CAAC;AACH,kBAAe,eAAe,CAAC"}

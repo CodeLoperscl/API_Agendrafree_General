@@ -12,46 +12,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUsuario = exports.putUsuario = exports.postUsuario = exports.getUser = exports.getUsers = void 0;
-const usuario_1 = __importDefault(require("../models/usuario"));
-const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield usuario_1.default.findAll();
-    res.json({ users });
+exports.deleteEspecialista = exports.putEspecialista = exports.postEspecialista = exports.getEspecialista = exports.getEspecialistas = void 0;
+const especialista_1 = __importDefault(require("../models/especialista"));
+const getEspecialistas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const especialistas = yield especialista_1.default.findAll();
+    res.json({ especialistas });
 });
-exports.getUsers = getUsers;
-const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getEspecialistas = getEspecialistas;
+const getEspecialista = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const user = yield usuario_1.default.findByPk(id);
-    if (user) {
-        res.json(user);
+    const especialista = yield especialista_1.default.findByPk(id);
+    if (especialista) {
+        res.json(especialista);
     }
     else {
         res.status(404).json({
-            msg: `No existe el usuario con la id ${id}`,
+            msg: `No existe una especialista con la id ${id}`,
         });
     }
 });
-exports.getUser = getUser;
-const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getEspecialista = getEspecialista;
+const postEspecialista = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { user_name, password } = body;
+    const { uid, hora_minima_bono, id_persona, bd_name, bd_user, bd_pass, bd_url } = body;
     try {
-        const existeEmail = yield usuario_1.default.findOne({
+        const existeEspecialista = yield especialista_1.default.findOne({
             where: {
-                user_name,
+                uid,
             },
         });
-        if (existeEmail) {
+        if (existeEspecialista) {
             return res.status(400).json({
-                msg: "Ya existe un usuario con este nombre " + user_name,
+                msg: "Ya existe una especialista con el uid " + uid,
             });
         }
-        const salto = bcryptjs_1.default.genSaltSync();
-        const psswd = bcryptjs_1.default.hashSync(password, salto);
-        const usuario = yield usuario_1.default.create({ user_name, password: psswd });
+        const especialista = yield especialista_1.default.create({ uid, hora_minima_bono, id_persona, bd_name, bd_user, bd_pass, bd_url });
         // res.json(psswd);
-        res.json(usuario);
+        res.json(especialista);
     }
     catch (error) {
         console.log(error);
@@ -60,19 +57,19 @@ const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
 });
-exports.postUsuario = postUsuario;
-const putUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.postEspecialista = postEspecialista;
+const putEspecialista = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { body } = req;
     try {
-        const usuario = yield usuario_1.default.findByPk(id);
-        if (!usuario) {
+        const especialista = yield especialista_1.default.findByPk(id);
+        if (!especialista) {
             return res.status(404).json({
-                msg: "No existe un usuario con el id " + id,
+                msg: "No existe una especialista con el id " + id,
             });
         }
-        yield usuario.update(body);
-        res.json(usuario);
+        yield especialista.update(body);
+        res.json(especialista);
     }
     catch (error) {
         console.log(error);
@@ -81,18 +78,18 @@ const putUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
 });
-exports.putUsuario = putUsuario;
-const deleteUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.putEspecialista = putEspecialista;
+const deleteEspecialista = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const usuario = yield usuario_1.default.findByPk(id);
-    if (!usuario) {
+    const especialista = yield especialista_1.default.findByPk(id);
+    if (!especialista) {
         return res.status(404).json({
-            msg: "No existe un usuario con el id " + id,
+            msg: "No existe una especialista con el id " + id,
         });
     }
-    yield usuario.update({ estado: false });
-    // await usuario.destroy();
-    res.json(usuario);
+    yield especialista.update({ estado: false });
+    // await estado_usuario.destroy();
+    res.json(especialista);
 });
-exports.deleteUsuario = deleteUsuario;
+exports.deleteEspecialista = deleteEspecialista;
 //# sourceMappingURL=especialista.js.map

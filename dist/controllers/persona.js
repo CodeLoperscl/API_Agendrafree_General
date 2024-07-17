@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePersona = exports.putPersona = exports.postPersona = exports.getPersona = exports.getPersonas = void 0;
 const persona_1 = __importDefault(require("../models/persona"));
 const getPersonas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const Personas = yield persona_1.default.findAll();
-    res.json({ Personas });
+    const personas = yield persona_1.default.findAll();
+    res.json({ personas });
 });
 exports.getPersonas = getPersonas;
 const getPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -27,7 +27,7 @@ const getPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     else {
         res.status(404).json({
-            msg: `No existe el nacionalidad con la id ${id}`,
+            msg: `No existe una persona con la id ${id}`,
         });
     }
 });
@@ -43,12 +43,12 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
         if (existePersona) {
             return res.status(400).json({
-                msg: "Ya existe un usuario con este rut " + rut,
+                msg: "Ya existe una persona con este rut " + rut,
             });
         }
-        const usuario = yield persona_1.default.create({ nombre, apellido, rut, email, fono });
+        const persona = yield persona_1.default.create({ nombre, apellido, rut, email, fono });
         // res.json(psswd);
-        res.json(usuario);
+        res.json(persona);
     }
     catch (error) {
         console.log(error);
@@ -65,7 +65,7 @@ const putPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const persona = yield persona_1.default.findByPk(id);
         if (!persona) {
             return res.status(404).json({
-                msg: "No existe un nacionalidad con el id " + id,
+                msg: "No existe una persona con el id " + id,
             });
         }
         yield persona.update(body);

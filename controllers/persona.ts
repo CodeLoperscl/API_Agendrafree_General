@@ -1,9 +1,9 @@
 import Persona from "../models/persona";
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 
 export const getPersonas = async (req: Request, res: Response) => {
-  const Personas = await Persona.findAll();
-  res.json({ Personas });
+  const personas = await Persona.findAll();
+  res.json({ personas });
 };
 
 export const getPersona = async (req: Request, res: Response) => {
@@ -14,7 +14,7 @@ export const getPersona = async (req: Request, res: Response) => {
   res.json(persona);
   } else {
   res.status(404).json({
-      msg: `No existe el nacionalidad con la id ${id}`,
+      msg: `No existe una persona con la id ${id}`,
   });
   }
 };
@@ -32,14 +32,14 @@ export const postPersona = async (req: Request, res: Response) => {
 
     if (existePersona) {
       return res.status(400).json({
-        msg: "Ya existe un usuario con este rut " + rut,
+        msg: "Ya existe una persona con este rut " + rut,
       });
     }
 
-    const usuario = await Persona.create({ nombre, apellido, rut, email, fono});
+    const persona = await Persona.create({ nombre, apellido, rut, email, fono});
 
     // res.json(psswd);
-    res.json(usuario);
+    res.json(persona);
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -56,7 +56,7 @@ export const putPersona = async (req: Request, res: Response) => {
   const persona = await Persona.findByPk(id);
   if (!persona) {
       return res.status(404).json({
-      msg: "No existe un nacionalidad con el id " + id,
+      msg: "No existe una persona con el id " + id,
       });
   }
 

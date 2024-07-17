@@ -15,14 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUsuario = exports.putUsuario = exports.postUsuario = exports.getUser = exports.getUsers = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-//import Estados_usuarios from "../models/estado_usuario";
+const estado_usuario_1 = __importDefault(require("../models/estado_usuario"));
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield usuario_1.default.findAll({
-    // include: [
-    //   {
-    //     model: Estados_usuarios
-    //   }
-    // ]
+        include: estado_usuario_1.default
     });
     res.json({ users });
 });
@@ -30,10 +26,7 @@ exports.getUsers = getUsers;
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const user = yield usuario_1.default.findByPk(id, {
-    // include: [
-    //   {
-    //     model: Estados_usuarios
-    //   }]
+        include: estado_usuario_1.default
     });
     if (user) {
         res.json(user);

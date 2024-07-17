@@ -24,7 +24,7 @@ export const getEstado_usuario = async (req: Request, res: Response) => {
     res.json(estado_usuario);
     } else {
     res.status(404).json({
-        msg: `No existe el estado_usuario con la id ${id}`,
+        msg: `No existe el estado usuario con la id ${id}`,
     });
     }
 };

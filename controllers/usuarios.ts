@@ -1,15 +1,12 @@
 import Users from "../models/usuario";
 import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
-//import Estados_usuarios from "../models/estado_usuario";
+import Estados_usuarios from "../models/estado_usuario";
 
 export const getUsers = async (req: Request, res: Response) => {
   const users = await Users.findAll({
-    // include: [
-    //   {
-    //     model: Estados_usuarios
-    //   }
-    // ]
+    include: Estados_usuarios
+
   });
   res.json({ users });
 };
@@ -17,10 +14,8 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
   const { id }: any = req.params;
   const user = await Users.findByPk(id, {
-    // include: [
-    //   {
-    //     model: Estados_usuarios
-    //   }]
+  include: Estados_usuarios
+  
   });
 
   if (user) {
