@@ -9,13 +9,20 @@ import estado_usuarioRoutes from "../rutas/estado_usuario";
 import pacienteRoutes from "../rutas/paciente";
 import citaRoutes from "../rutas/cita";
 import estado_citaRoutes from "../rutas/estado_cita";
+import estadosRoutes from "../rutas/estados";
 import especialistaRoutes from "../rutas/especialista";
 import previsiontaRoutes from "../rutas/prevision";
 import hora_disponibleRoutes from "../rutas/hora_disponible";
+import archivoRoutes from "../rutas/archivo";
+import tipo_archivoRoutes from "../rutas/tipo_archivo";
+import servicioRoutes from "../rutas/servicios";
+import especialidadRoutes from "../rutas/especialidad";
 
 import { syncModels } from "./index";
 
 import cors from "cors";
+
+
 
 class Server {
   private app: Application;
@@ -29,9 +36,15 @@ class Server {
     paciente: "/api/paciente",
     cita: "/api/cita",
     estado_cita: "/api/estado_cita",
+    estado: "/api/estados",
     especialista: "/api/especialista",
     prevision: "/api/prevision",
     hora_disponible: "/api/hora_disponible",
+    archivo: "/api/archivo",
+    tipo_archivo: "/api/tipo_archivo",
+    servicio: "/api/servicio",
+    especialidad: "/api/especialidad",
+
   };
 
   constructor() {
@@ -86,9 +99,11 @@ class Server {
     this.app.use(this.apiPath.especialista, especialistaRoutes);
     this.app.use(this.apiPath.prevision, previsiontaRoutes);
     this.app.use(this.apiPath.hora_disponible, hora_disponibleRoutes);
-    
-
-
+    this.app.use(this.apiPath.estado, estadosRoutes);
+    this.app.use(this.apiPath.archivo, archivoRoutes);
+    this.app.use(this.apiPath.tipo_archivo, tipo_archivoRoutes);
+    this.app.use(this.apiPath.servicio, servicioRoutes);
+    this.app.use(this.apiPath.especialidad, especialidadRoutes);
 
   }
 

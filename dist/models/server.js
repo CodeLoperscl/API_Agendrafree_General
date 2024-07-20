@@ -23,9 +23,14 @@ const estado_usuario_1 = __importDefault(require("../rutas/estado_usuario"));
 const paciente_1 = __importDefault(require("../rutas/paciente"));
 const cita_1 = __importDefault(require("../rutas/cita"));
 const estado_cita_1 = __importDefault(require("../rutas/estado_cita"));
+const estados_1 = __importDefault(require("../rutas/estados"));
 const especialista_1 = __importDefault(require("../rutas/especialista"));
 const prevision_1 = __importDefault(require("../rutas/prevision"));
 const hora_disponible_1 = __importDefault(require("../rutas/hora_disponible"));
+const archivo_1 = __importDefault(require("../rutas/archivo"));
+const tipo_archivo_1 = __importDefault(require("../rutas/tipo_archivo"));
+const servicios_1 = __importDefault(require("../rutas/servicios"));
+const especialidad_1 = __importDefault(require("../rutas/especialidad"));
 const index_1 = require("./index");
 const cors_1 = __importDefault(require("cors"));
 class Server {
@@ -39,9 +44,14 @@ class Server {
             paciente: "/api/paciente",
             cita: "/api/cita",
             estado_cita: "/api/estado_cita",
+            estado: "/api/estados",
             especialista: "/api/especialista",
             prevision: "/api/prevision",
             hora_disponible: "/api/hora_disponible",
+            archivo: "/api/archivo",
+            tipo_archivo: "/api/tipo_archivo",
+            servicio: "/api/servicio",
+            especialidad: "/api/especialidad",
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || "8000";
@@ -94,6 +104,11 @@ class Server {
         this.app.use(this.apiPath.especialista, especialista_1.default);
         this.app.use(this.apiPath.prevision, prevision_1.default);
         this.app.use(this.apiPath.hora_disponible, hora_disponible_1.default);
+        this.app.use(this.apiPath.estado, estados_1.default);
+        this.app.use(this.apiPath.archivo, archivo_1.default);
+        this.app.use(this.apiPath.tipo_archivo, tipo_archivo_1.default);
+        this.app.use(this.apiPath.servicio, servicios_1.default);
+        this.app.use(this.apiPath.especialidad, especialidad_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {

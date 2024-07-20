@@ -12,43 +12,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEstado_cita = exports.putEstado_cita = exports.postEstado_cita = exports.getEstado_cita = exports.getEstados_citas = void 0;
+exports.deleteEstado = exports.putEstado = exports.postEstado = exports.getEstado = exports.getEstados = void 0;
 const estados_1 = __importDefault(require("../models/estados"));
-const getEstados_citas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const estados_citas = yield estados_1.default.findAll();
-    res.json({ estados_citas });
+const getEstados = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const estado = yield estados_1.default.findAll();
+    res.json({ estado });
 });
-exports.getEstados_citas = getEstados_citas;
-const getEstado_cita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getEstados = getEstados;
+const getEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const estado_cita = yield estados_1.default.findByPk(id);
-    if (estado_cita) {
-        res.json(estado_cita);
+    const estado = yield estados_1.default.findByPk(id);
+    if (estado) {
+        res.json(estado);
     }
     else {
         res.status(404).json({
-            msg: `No existe una estado_cita con la id ${id}`,
+            msg: `No existe una Estado con la id ${id}`,
         });
     }
 });
-exports.getEstado_cita = getEstado_cita;
-const postEstado_cita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getEstado = getEstado;
+const postEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     const { estado } = body;
     try {
-        const existeCita = yield estados_1.default.findOne({
+        const existeEstado = yield estados_1.default.findOne({
             where: {
                 estado,
             },
         });
-        if (existeCita) {
+        if (existeEstado) {
             return res.status(400).json({
                 msg: "Ya existe un estado cita con el id " + estado,
             });
         }
-        const estado_cita = yield estados_1.default.create({ estado });
+        const Estadito = yield estados_1.default.create({ estado });
         // res.json(psswd);
-        res.json(estado_cita);
+        res.json(Estadito);
     }
     catch (error) {
         console.log(error);
@@ -57,19 +57,19 @@ const postEstado_cita = (req, res) => __awaiter(void 0, void 0, void 0, function
         });
     }
 });
-exports.postEstado_cita = postEstado_cita;
-const putEstado_cita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.postEstado = postEstado;
+const putEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { body } = req;
     try {
-        const estado_cita = yield estados_1.default.findByPk(id);
-        if (!estado_cita) {
+        const estado = yield estados_1.default.findByPk(id);
+        if (!estado) {
             return res.status(404).json({
-                msg: "No existe un estado_cita con el id " + id,
+                msg: "No existe un estado con el id " + id,
             });
         }
-        yield estado_cita.update(body);
-        res.json(estado_cita);
+        yield estado.update(body);
+        res.json(estado);
     }
     catch (error) {
         console.log(error);
@@ -78,18 +78,18 @@ const putEstado_cita = (req, res) => __awaiter(void 0, void 0, void 0, function*
         });
     }
 });
-exports.putEstado_cita = putEstado_cita;
-const deleteEstado_cita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.putEstado = putEstado;
+const deleteEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const estado_cita = yield estados_1.default.findByPk(id);
-    if (!estado_cita) {
+    const estado = yield estados_1.default.findByPk(id);
+    if (!estado) {
         return res.status(404).json({
-            msg: "No existe una estado_cita con el id " + id,
+            msg: "No existe una estado con el id " + id,
         });
     }
-    yield estado_cita.update({ estado: false });
+    yield estado.update({ estado: false });
     // await estado_usuario.destroy();
-    res.json(estado_cita);
+    res.json(estado);
 });
-exports.deleteEstado_cita = deleteEstado_cita;
-//# sourceMappingURL=estado_cita.js.map
+exports.deleteEstado = deleteEstado;
+//# sourceMappingURL=estados.js.map

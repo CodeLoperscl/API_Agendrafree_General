@@ -14,10 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCita = exports.putCita = exports.postCita = exports.getCita = exports.getCitas = void 0;
 const cita_1 = __importDefault(require("../models/cita"));
-const estado_cita_1 = __importDefault(require("../models/estado_cita"));
+const estados_1 = __importDefault(require("../models/estados"));
+const paciente_1 = __importDefault(require("../models/paciente"));
+const especialista_1 = __importDefault(require("../models/especialista"));
+const prevision_1 = __importDefault(require("../models/prevision"));
+const hora_disponible_1 = __importDefault(require("../models/hora_disponible"));
 const getCitas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const citas = yield cita_1.default.findAll({
-        include: estado_cita_1.default,
+        include: [estados_1.default, paciente_1.default, especialista_1.default, prevision_1.default, hora_disponible_1.default]
     });
     res.json({ citas });
 });

@@ -14,20 +14,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.syncModels = void 0;
 const cita_1 = __importDefault(require("./cita"));
-const estado_cita_1 = __importDefault(require("./estado_cita"));
+const estados_1 = __importDefault(require("./estados"));
 const estado_usuario_1 = __importDefault(require("./estado_usuario"));
 const usuario_1 = __importDefault(require("./usuario"));
+const paciente_1 = __importDefault(require("./paciente"));
+const hora_disponible_1 = __importDefault(require("./hora_disponible"));
+const especialista_1 = __importDefault(require("./especialista"));
+const prevision_1 = __importDefault(require("./prevision"));
 // Establecer las asociaciones
+//belongsto = 1 a 1
+//hasmany = 1 a N
 estado_usuario_1.default.hasMany(usuario_1.default, { foreignKey: "estado" });
 usuario_1.default.belongsTo(estado_usuario_1.default, { foreignKey: "estado" });
-estado_cita_1.default.hasMany(cita_1.default, { foreignKey: "id_estado" });
-cita_1.default.belongsTo(estado_cita_1.default, { foreignKey: "id_estado" });
+//CITA 1 a -> x
+cita_1.default.belongsTo(estados_1.default, { foreignKey: "id_estado" });
+cita_1.default.belongsTo(paciente_1.default, { foreignKey: "id_paciente" });
+cita_1.default.belongsTo(especialista_1.default, { foreignKey: "id_especialista" });
+cita_1.default.belongsTo(hora_disponible_1.default, { foreignKey: "id_hora" });
+cita_1.default.belongsTo(prevision_1.default, { foreignKey: "id_prevision" });
+//Cita x -> Cita
+estados_1.default.hasMany(cita_1.default, { foreignKey: "id_estado" });
+paciente_1.default.hasMany(cita_1.default, { foreignKey: "id_paciente" });
+especialista_1.default.hasMany(cita_1.default, { foreignKey: "id_especialista" });
+hora_disponible_1.default.hasMany(cita_1.default, { foreignKey: "id_hora" });
+prevision_1.default.hasMany(cita_1.default, { foreignKey: "id_prevision" });
 const syncModels = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield estado_usuario_1.default.sync({ alter: true });
-        yield usuario_1.default.sync({ alter: true });
-        yield estado_cita_1.default.sync({ alter: false });
+        yield estado_usuario_1.default.sync({ alter: false });
+        yield usuario_1.default.sync({ alter: false });
+        yield estados_1.default.sync({ alter: false });
         yield cita_1.default.sync({ alter: false });
+        yield paciente_1.default.sync({ alter: false });
+        yield especialista_1.default.sync({ alter: false });
+        yield hora_disponible_1.default.sync({ alter: false });
+        yield prevision_1.default.sync({ alter: false });
         console.log("Modelos sincronizados correctamente");
     }
     catch (error) {

@@ -1,4 +1,4 @@
-import Estado_Cita from "../models/estado_cita";
+import Estado_Cita from "../models/estados";
 import { Request, Response } from "express";
 import Cita from "../models/cita";
 

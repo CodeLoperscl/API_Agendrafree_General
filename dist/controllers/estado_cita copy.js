@@ -92,4 +92,4 @@ const deleteEstado_cita = (req, res) => __awaiter(void 0, void 0, void 0, functi
     res.json(estado_cita);
 });
 exports.deleteEstado_cita = deleteEstado_cita;
-//# sourceMappingURL=estado_cita.js.map
+//# sourceMappingURL=estado_cita%20copy.js.map

@@ -1,11 +1,18 @@
 import Cita from "../models/cita";
 import { Request, Response } from "express";
 import { Op } from "sequelize";
-import Estado_Cita from "../models/estado_cita";
+import Estado_Cita from "../models/estados";
+import Paciente from "../models/paciente";
+import Especialista from "../models/especialista";
+import Prevision from "../models/prevision";
+import Hora_disponible from "../models/hora_disponible";
+import Persona from "../models/persona";
+
 
 export const getCitas = async (req: Request, res: Response) => {
   const citas = await Cita.findAll({
-    include: Estado_Cita,
+    include: [Estado_Cita,Paciente, Especialista, Prevision, Hora_disponible]
+    
   });
   res.json({ citas });
 };
