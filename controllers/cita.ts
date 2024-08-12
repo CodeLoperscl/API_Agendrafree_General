@@ -6,7 +6,6 @@ import Paciente from "../models/paciente";
 import Especialista from "../models/especialista";
 import Prevision from "../models/prevision";
 import Hora_disponible from "../models/hora_disponible";
-import Persona from "../models/persona";
 
 
 export const getCitas = async (req: Request, res: Response) => {
