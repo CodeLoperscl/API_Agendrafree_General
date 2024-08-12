@@ -14,14 +14,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteNacionalidad = exports.putNacionalidad = exports.postNacionalidad = exports.getNacionalidad = exports.getNacionalidades = void 0;
 const nacionalidad_1 = __importDefault(require("../models/nacionalidad"));
+const persona_1 = __importDefault(require("../models/persona"));
 const getNacionalidades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const nacionalidades = yield nacionalidad_1.default.findAll();
+    const nacionalidades = yield nacionalidad_1.default.findAll({
+        include: [{
+                model: persona_1.default
+            }]
+    });
     res.json({ nacionalidades });
 });
 exports.getNacionalidades = getNacionalidades;
 const getNacionalidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const nacionalidad = yield nacionalidad_1.default.findByPk(id);
+    const nacionalidad = yield nacionalidad_1.default.findByPk(id, {
+        include: [{
+                model: persona_1.default
+            }]
+    });
     if (nacionalidad) {
         res.json(nacionalidad);
     }

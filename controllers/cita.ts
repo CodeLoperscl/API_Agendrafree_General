@@ -24,7 +24,7 @@ export const getCita = async (req: Request, res: Response) => {
   res.json(cita);
   } else {
   res.status(404).json({
-      msg: `No existe una cita con la id ${id}`,
+      msg: `No existe una citas con la id ${id}`,
   });
   }
 };

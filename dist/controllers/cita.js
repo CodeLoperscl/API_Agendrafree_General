@@ -34,7 +34,7 @@ const getCita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     else {
         res.status(404).json({
-            msg: `No existe una cita con la id ${id}`,
+            msg: `No existe una citas con la id ${id}`,
         });
     }
 });

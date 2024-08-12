@@ -1,17 +1,25 @@
 import Persona from "../models/persona";
 import { Request, Response } from "express";
+import Nacionalidades from "../models/nacionalidad";
 
 export const getPersonas = async (req: Request, res: Response) => {
-  const personas = await Persona.findAll();
+  const personas = await Persona.findAll({
+    include: Nacionalidades
+
+  });
   res.json({ personas });
+
 };
 
 export const getPersona = async (req: Request, res: Response) => {
   const { id }: any = req.params;
-  const persona = await Persona.findByPk(id);
+  const persona = await Persona.findByPk(id, {
+    include: Nacionalidades
+  
+  });
 
   if (persona) {
-  res.json(persona);
+    res.json(persona);
   } else {
   res.status(404).json({
       msg: `No existe una persona con la id ${id}`,

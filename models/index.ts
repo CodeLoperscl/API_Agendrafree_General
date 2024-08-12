@@ -7,6 +7,7 @@ import Hora_disponible from "./hora_disponible";
 import Especialista from "./especialista";
 import Prevision from "./prevision";
 import Persona from "./persona";
+import Nacionalidades from "./nacionalidad";
 
 
 // Establecer las asociaciones
@@ -14,6 +15,9 @@ import Persona from "./persona";
 //hasmany = 1 a N
 Estados_usuarios.hasMany(Users, { foreignKey: "estado" });
 Users.belongsTo(Estados_usuarios, { foreignKey: "estado" });
+
+Nacionalidades.hasMany(Persona, {foreignKey: "id_nacionalidad"})
+Persona.belongsTo(Nacionalidades, {foreignKey: "id_nacionalidad"})
 
 
 //CITA 1 a -> x
@@ -30,10 +34,13 @@ Hora_disponible.hasMany(Cita, {foreignKey: "id_hora"});
 Prevision.hasMany(Cita, {foreignKey: "id_prevision"});
 
 
+
 export const syncModels = async () => {
 try {
     await Estados_usuarios.sync({ alter: false });
     await Users.sync({ alter: false});
+    await Nacionalidades.sync({alter: false});
+    await Persona.sync({alter: false});
     await Estado_Cita.sync({ alter: false });
     await Cita.sync({ alter: false });
     await Paciente.sync({ alter: false });

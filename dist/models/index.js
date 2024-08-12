@@ -21,11 +21,15 @@ const paciente_1 = __importDefault(require("./paciente"));
 const hora_disponible_1 = __importDefault(require("./hora_disponible"));
 const especialista_1 = __importDefault(require("./especialista"));
 const prevision_1 = __importDefault(require("./prevision"));
+const persona_1 = __importDefault(require("./persona"));
+const nacionalidad_1 = __importDefault(require("./nacionalidad"));
 // Establecer las asociaciones
 //belongsto = 1 a 1
 //hasmany = 1 a N
 estado_usuario_1.default.hasMany(usuario_1.default, { foreignKey: "estado" });
 usuario_1.default.belongsTo(estado_usuario_1.default, { foreignKey: "estado" });
+nacionalidad_1.default.hasMany(persona_1.default, { foreignKey: "id_nacionalidad" });
+persona_1.default.belongsTo(nacionalidad_1.default, { foreignKey: "id_nacionalidad" });
 //CITA 1 a -> x
 cita_1.default.belongsTo(estados_1.default, { foreignKey: "id_estado" });
 cita_1.default.belongsTo(paciente_1.default, { foreignKey: "id_paciente" });
@@ -42,6 +46,8 @@ const syncModels = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield estado_usuario_1.default.sync({ alter: false });
         yield usuario_1.default.sync({ alter: false });
+        yield nacionalidad_1.default.sync({ alter: false });
+        yield persona_1.default.sync({ alter: false });
         yield estados_1.default.sync({ alter: false });
         yield cita_1.default.sync({ alter: false });
         yield paciente_1.default.sync({ alter: false });

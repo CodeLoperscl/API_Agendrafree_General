@@ -1,15 +1,25 @@
 import Nacionalidades from "../models/nacionalidad";
 import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
+import Persona from "../models/persona";
 
 export const getNacionalidades = async (req: Request, res: Response) => {
-    const nacionalidades = await Nacionalidades.findAll();
+    const nacionalidades = await Nacionalidades.findAll({
+        include: [{
+            model: Persona
+        }]
+
+    });
     res.json({ nacionalidades });
 };
 
 export const getNacionalidad = async (req: Request, res: Response) => {
     const { id }: any = req.params;
-    const nacionalidad = await Nacionalidades.findByPk(id);
+    const nacionalidad = await Nacionalidades.findByPk(id, {
+        include: [{
+            model:Persona
+        }]
+    });
 
     if (nacionalidad) {
     res.json(nacionalidad);
