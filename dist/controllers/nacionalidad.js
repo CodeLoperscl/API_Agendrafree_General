@@ -17,9 +17,7 @@ const nacionalidad_1 = __importDefault(require("../models/nacionalidad"));
 const persona_1 = __importDefault(require("../models/persona"));
 const getNacionalidades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const nacionalidades = yield nacionalidad_1.default.findAll({
-        include: [{
-                model: persona_1.default
-            }]
+        include: persona_1.default
     });
     res.json({ nacionalidades });
 });
@@ -27,9 +25,7 @@ exports.getNacionalidades = getNacionalidades;
 const getNacionalidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const nacionalidad = yield nacionalidad_1.default.findByPk(id, {
-        include: [{
-                model: persona_1.default
-            }]
+        include: persona_1.default
     });
     if (nacionalidad) {
         res.json(nacionalidad);

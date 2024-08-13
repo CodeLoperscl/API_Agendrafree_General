@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import db from "../BD/connection";
 //import Estados_usuarios from "./estado_usuario";
 
-const Users = db.define("usuario", {
+const Users = db.define("usuarios", {
   uid: {
     type: DataTypes.STRING,
   },
@@ -23,11 +23,6 @@ Users.prototype.toJSON = function () {
   delete values.password;
   return values;
 };
-// Users.belongsTo(Estados_usuarios, {
-//   foreignKey: 'estado'
-// });
 
-
-  
 
 export default Users;

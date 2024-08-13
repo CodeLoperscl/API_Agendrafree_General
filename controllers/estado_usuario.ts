@@ -5,9 +5,7 @@ import Users from "../models/usuario";
 
 export const getEstados_usuarios = async (req: Request, res: Response) => {
     const estados_usuarios = await Estados_usuarios.findAll({
-        include: [{
-            model: Users
-        }]
+        include: Users
     });
     res.json({ estados_usuarios });
 };
@@ -15,9 +13,7 @@ export const getEstados_usuarios = async (req: Request, res: Response) => {
 export const getEstado_usuario = async (req: Request, res: Response) => {
     const { id }: any = req.params;
     const estado_usuario = await Estados_usuarios.findByPk(id, {
-        include: [{
-            model: Users
-        }]
+        include: Users
     });
 
     if (estado_usuario) {

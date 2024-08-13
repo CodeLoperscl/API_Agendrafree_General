@@ -14,14 +14,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePaciente = exports.putPaciente = exports.postPaciente = exports.getPaciente = exports.getPacientes = void 0;
 const paciente_1 = __importDefault(require("../models/paciente"));
+const persona_1 = __importDefault(require("../models/persona"));
 const getPacientes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const pacientes = yield paciente_1.default.findAll();
+    const pacientes = yield paciente_1.default.findAll({
+        include: persona_1.default
+    });
     res.json({ pacientes });
 });
 exports.getPacientes = getPacientes;
 const getPaciente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const paciente = yield paciente_1.default.findByPk(id);
+    const paciente = yield paciente_1.default.findByPk(id, {
+        include: persona_1.default
+    });
     if (paciente) {
         res.json(paciente);
     }

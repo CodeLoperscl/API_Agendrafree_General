@@ -17,9 +17,7 @@ const estado_usuario_1 = __importDefault(require("../models/estado_usuario"));
 const usuario_1 = __importDefault(require("../models/usuario"));
 const getEstados_usuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const estados_usuarios = yield estado_usuario_1.default.findAll({
-        include: [{
-                model: usuario_1.default
-            }]
+        include: usuario_1.default
     });
     res.json({ estados_usuarios });
 });
@@ -27,9 +25,7 @@ exports.getEstados_usuarios = getEstados_usuarios;
 const getEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const estado_usuario = yield estado_usuario_1.default.findByPk(id, {
-        include: [{
-                model: usuario_1.default
-            }]
+        include: usuario_1.default
     });
     if (estado_usuario) {
         res.json(estado_usuario);

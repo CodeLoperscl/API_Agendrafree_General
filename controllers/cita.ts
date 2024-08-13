@@ -6,12 +6,12 @@ import Paciente from "../models/paciente";
 import Especialista from "../models/especialista";
 import Prevision from "../models/prevision";
 import Hora_disponible from "../models/hora_disponible";
+import Archivo from "../models/archivo";
 
 
 export const getCitas = async (req: Request, res: Response) => {
   const citas = await Cita.findAll({
-    include: [Estado_Cita,Paciente, Especialista, Prevision, Hora_disponible]
-    
+    include: [Estado_Cita,Paciente,Especialista,Prevision,Hora_disponible]
   });
   res.json({ citas });
 };
