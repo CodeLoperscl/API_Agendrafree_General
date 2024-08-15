@@ -4,7 +4,7 @@ import Persona from "../models/persona";
 
 export const getPacientes = async (req: Request, res: Response) => {
   const pacientes = await Paciente.findAll({
-    include: Persona
+    // include: Persona
   });
   res.json({ pacientes });
 };
@@ -12,7 +12,7 @@ export const getPacientes = async (req: Request, res: Response) => {
 export const getPaciente = async (req: Request, res: Response) => {
   const { id }: any = req.params;
   const paciente = await Paciente.findByPk(id, {
-    include: Persona
+    //include: Persona
   });
 
   if (paciente) {

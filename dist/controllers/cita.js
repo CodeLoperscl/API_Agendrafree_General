@@ -28,7 +28,9 @@ const getCitas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getCitas = getCitas;
 const getCita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const cita = yield cita_1.default.findByPk(id);
+    const cita = yield cita_1.default.findByPk(id, {
+        include: [estados_1.default, paciente_1.default, especialista_1.default, prevision_1.default, hora_disponible_1.default]
+    });
     if (cita) {
         res.json(cita);
     }
@@ -41,7 +43,7 @@ const getCita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getCita = getCita;
 const postCita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { fecha } = body;
+    const { fecha, id_estado, id_paciente, id_especialista, id_prevision, id_hora } = body;
     try {
         const existeCita = yield cita_1.default.findOne({
             where: {
@@ -53,7 +55,7 @@ const postCita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 msg: "Ya existe una cita con este rut " + fecha,
             });
         }
-        const cita = yield cita_1.default.create({});
+        const cita = yield cita_1.default.create({ fecha, id_estado, id_paciente, id_especialista, id_prevision, id_hora });
         // res.json(psswd);
         res.json(cita);
     }

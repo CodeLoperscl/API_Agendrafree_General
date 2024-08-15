@@ -48,21 +48,9 @@ paciente_1.default.hasMany(cita_1.default, { foreignKey: "id_paciente" });
 especialista_1.default.hasMany(cita_1.default, { foreignKey: "id_especialista" });
 prevision_1.default.hasMany(cita_1.default, { foreignKey: "id_prevision" });
 hora_disponible_1.default.hasMany(cita_1.default, { foreignKey: "id_hora" });
-//bd_agendafree_especialista
-// Cita.belongsTo(Estado_Cita, {foreignKey: "id_estado"})
-// Estado_Cita.hasMany(Cita, {foreignKey: "id_estado"})
-//CITA 1 a -> x
-// Cita.belongsTo(Estado_Cita, {foreignKey: "id_estado"});
-// Cita.belongsTo(Paciente, {foreignKey: "id_paciente"});
-// Cita.belongsTo(Especialista, {foreignKey: "id_especialista"});
-// Cita.belongsTo(Hora_disponible, {foreignKey: "id_hora"});
-// Cita.belongsTo(Prevision, {foreignKey: "id_prevision"});
-// //Cita x -> Cita
-// Estado_Cita.hasMany(Cita, {foreignKey: "id_estado"});
-// Paciente.hasMany(Cita, {foreignKey: "id_paciente"});
-// Especialista.hasMany(Cita, {foreignKey: "id_especialista"});
-// Hora_disponible.hasMany(Cita, {foreignKey: "id_hora"});
-// Prevision.hasMany(Cita, {foreignKey: "id_prevision"});
+//Persona -> paciente
+// Persona.belongsTo(Paciente, {foreignKey: "id_persona" })//utilizamos FK paciente
+// Paciente.belongsTo(Persona, {foreignKey: "id_persona"})
 // //especialista x -> especialidades
 // Especialista.belongsTo(Especialidad, {foreignKey: "id_especialidad"})
 const syncModels = () => __awaiter(void 0, void 0, void 0, function* () {

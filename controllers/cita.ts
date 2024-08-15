@@ -18,7 +18,9 @@ export const getCitas = async (req: Request, res: Response) => {
 
 export const getCita = async (req: Request, res: Response) => {
   const { id }: any = req.params;
-  const cita = await Cita.findByPk(id);
+  const cita = await Cita.findByPk(id, {
+    include: [Estado_Cita,Paciente,Especialista,Prevision,Hora_disponible]
+  });
   if (cita) {
   res.json(cita);
   } else {
@@ -30,7 +32,7 @@ export const getCita = async (req: Request, res: Response) => {
 
 export const postCita = async (req: Request, res: Response) => {
   const { body } = req;
-  const { fecha } = body;
+  const { fecha, id_estado, id_paciente, id_especialista, id_prevision, id_hora } = body;
   try {
     const existeCita = await Cita.findOne({
       where: {
@@ -44,7 +46,7 @@ export const postCita = async (req: Request, res: Response) => {
       });
     }
 
-    const cita = await Cita.create({ });
+    const cita = await Cita.create({fecha, id_estado, id_paciente, id_especialista, id_prevision, id_hora });
 
     // res.json(psswd);
     res.json(cita);
