@@ -45,6 +45,7 @@ class Server {
     servicio: "/api/servicio",
     especialidad: "/api/especialidad",
 
+
   };
 
   constructor() {

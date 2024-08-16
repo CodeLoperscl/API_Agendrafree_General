@@ -27,6 +27,23 @@ export const getPersona = async (req: Request, res: Response) => {
   }
 };
 
+export const getPersona_rut = async (req: Request, res: Response) => {
+  const { rut }: any = req.params;
+  const persona = await Persona.findOne({ 
+    where: {rut},
+    include: Nacionalidades
+    });
+
+
+  if (persona) {
+    res.json(persona);
+  } else {
+  res.status(404).json({
+      msg: `No existe una persona con el rut: ${rut}`,
+  });
+  }
+};
+
 
 export const postPersona = async (req: Request, res: Response) => {
   const { body } = req;
