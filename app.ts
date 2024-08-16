@@ -1,8 +1,10 @@
 import dotenv from 'dotenv';
-import Server from './models/server';
+
+// Cargar las variables de entorno antes de hacer cualquier otra cosa
 dotenv.config();
+
+import Server from './models/server';
+
 const server = new Server();
 
 server.listen();
-
-
