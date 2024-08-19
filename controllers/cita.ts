@@ -45,7 +45,7 @@ export const postCita = async (req: Request, res: Response) => {
         msg: "Ya existe una cita con este rut " + fecha,
       });
     }
-
+//COMENTARIO DE PRUEBA
     const cita = await Cita.create({fecha, id_estado, id_paciente, id_especialista, id_prevision, id_hora });
 
     // res.json(psswd);
