@@ -1,3 +1,4 @@
+//Comentario de prueba
 import Cita from "../models/cita";
 import { Request, Response } from "express";
 import { Op } from "sequelize";
