@@ -47,7 +47,7 @@ export const getPersona_rut = async (req: Request, res: Response) => {
 
 export const postPersona = async (req: Request, res: Response) => {
   const { body } = req;
-  const { nombre, apellido, rut, email, fono } = body;
+  const { nombre, apellido, rut,id_nacionalidad, email, fono, } = body;
   try {
     const existePersona = await Persona.findOne({
       where: {
@@ -61,7 +61,7 @@ export const postPersona = async (req: Request, res: Response) => {
       });
     }
 
-    const persona = await Persona.create({ nombre, apellido, rut, email, fono});
+    const persona = await Persona.create({ nombre, apellido, rut,id_nacionalidad, email, fono});
 
     // res.json(psswd);
     res.json(persona);

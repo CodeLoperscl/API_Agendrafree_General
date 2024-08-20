@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
-import db_especialista from "../BD/connection_agenda_especialista";
+import db from "../BD/connection";
 
-const Hora_disponible = db_especialista.define("horas_disponibles", {
+const Hora_disponible = db.define("horas_disponibles", {
   id_especialista: {
     type: DataTypes.INTEGER,
   },

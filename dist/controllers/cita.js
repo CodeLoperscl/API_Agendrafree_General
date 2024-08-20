@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCita = exports.putCita = exports.postCita = exports.getCita = exports.getCitas = void 0;
+//Comentario de prueba
 const cita_1 = __importDefault(require("../models/cita"));
 const estados_1 = __importDefault(require("../models/estados"));
 const paciente_1 = __importDefault(require("../models/paciente"));
@@ -55,6 +56,7 @@ const postCita = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 msg: "Ya existe una cita con este rut " + fecha,
             });
         }
+        //COMENTARIO DE PRUEBA
         const cita = yield cita_1.default.create({ fecha, id_estado, id_paciente, id_especialista, id_prevision, id_hora });
         // res.json(psswd);
         res.json(cita);

@@ -55,7 +55,7 @@ const getPersona_rut = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.getPersona_rut = getPersona_rut;
 const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { nombre, apellido, rut, email, fono } = body;
+    const { nombre, apellido, rut, id_nacionalidad, email, fono, } = body;
     try {
         const existePersona = yield persona_1.default.findOne({
             where: {
@@ -67,7 +67,7 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 msg: "Ya existe una persona con este rut " + rut,
             });
         }
-        const persona = yield persona_1.default.create({ nombre, apellido, rut, email, fono });
+        const persona = yield persona_1.default.create({ nombre, apellido, rut, id_nacionalidad, email, fono });
         // res.json(psswd);
         res.json(persona);
     }

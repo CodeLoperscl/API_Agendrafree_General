@@ -1,1 +1,1 @@
-{"version":3,"file":"prevision.js","sourceRoot":"","sources":["../../models/prevision.ts"],"names":[],"mappings":";;;;;AAAA,yCAAsC;AACtC,0GAAmE;AAEnE,MAAM,SAAS,GAAG,wCAAe,CAAC,MAAM,CAAC,aAAa,EAAE;IACtD,MAAM,EAAE;QACN,IAAI,EAAE,qBAAS,CAAC,MAAM;KACvB;CAEF,CAAC,CAAC;AACH,kBAAe,SAAS,CAAC"}
+{"version":3,"file":"prevision.js","sourceRoot":"","sources":["../../models/prevision.ts"],"names":[],"mappings":";;;;;AAAA,yCAAsC;AACtC,kEAAkC;AAElC,MAAM,SAAS,GAAG,oBAAE,CAAC,MAAM,CAAC,aAAa,EAAE;IACzC,MAAM,EAAE;QACN,IAAI,EAAE,qBAAS,CAAC,MAAM;KACvB;CAEF,CAAC,CAAC;AACH,kBAAe,SAAS,CAAC"}

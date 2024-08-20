@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
-import db_especialista from "../BD/connection_agenda_especialista";
+import db from "../BD/connection";
 
-const Especialidad = db_especialista.define("especialidades", {
+const Especialidad = db.define("especialidades", {
   nombre: {
     type: DataTypes.STRING,
   },
