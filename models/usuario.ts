@@ -6,13 +6,13 @@ const Users = db.define("usuarios", {
   uid: {
     type: DataTypes.STRING,
   },
-  user_name: {
+  username: {
     type: DataTypes.STRING,
   },
   password: {
     type: DataTypes.STRING,
   },
-  estado: {
+  estado_id: {
     type: DataTypes.INTEGER,
       
   },

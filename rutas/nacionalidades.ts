@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { deleteNacionalidad, getNacionalidad, getNacionalidades, postNacionalidad, putNacionalidad } from "../controllers/nacionalidad";
+import { getNacionalidad,getNacionalidades,postNacionalidad,putNacionalidad,deleteNacionalidad } from "../controllers/nacionalidad";
 
 const route = Router();
 

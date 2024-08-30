@@ -1,16 +1,16 @@
 import { DataTypes } from "sequelize";
-import db from "../BD/connection";
+import db_especialista from "../BD/connection_agenda_especialista";
 
-const Paciente = db.define("pacientes", {
-  uid: {
-    type: DataTypes.STRING,
-  },
-  id_persona: {
+const Paciente = db_especialista.define("pacientes", {
+  persona_id: {
     type: DataTypes.INTEGER,
   },
-  id_prevision: {
+  prevision_id: {
     type: DataTypes.INTEGER,
-  }
+  },
+  estado_id: {
+    type: DataTypes.INTEGER,
+  },
   
 });
 export default Paciente;

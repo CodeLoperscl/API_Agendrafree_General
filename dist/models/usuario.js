@@ -10,13 +10,13 @@ const Users = connection_1.default.define("usuarios", {
     uid: {
         type: sequelize_1.DataTypes.STRING,
     },
-    user_name: {
+    username: {
         type: sequelize_1.DataTypes.STRING,
     },
     password: {
         type: sequelize_1.DataTypes.STRING,
     },
-    estado: {
+    estado_id: {
         type: sequelize_1.DataTypes.INTEGER,
     },
 });

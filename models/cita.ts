@@ -5,19 +5,19 @@ const Cita = db_especialista.define("citas", {
   fecha: {
     type: DataTypes.DATE,
   },
-  id_estado: {
+  estado_cita_id: {
     type: DataTypes.INTEGER,
   },
-  id_paciente: {
+  paciente_id: {
     type: DataTypes.INTEGER,
   },
-  id_especialista: {
+  prevision_id: {
     type: DataTypes.INTEGER,
   },
-  id_prevision: {
+  especialista_id: {
     type: DataTypes.INTEGER,
   },
-  id_hora: {
+  hora_id: {
     type: DataTypes.INTEGER,
   },
   

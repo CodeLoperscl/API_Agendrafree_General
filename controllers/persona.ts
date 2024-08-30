@@ -1,10 +1,11 @@
 import Persona from "../models/persona";
 import { Request, Response } from "express";
 import Nacionalidades from "../models/nacionalidad";
+import Users from "../models/usuario";
 
 export const getPersonas = async (req: Request, res: Response) => {
   const personas = await Persona.findAll({
-    include: Nacionalidades
+    include: [Nacionalidades, Users,] 
 
   });
   res.json({ personas });
@@ -14,7 +15,7 @@ export const getPersonas = async (req: Request, res: Response) => {
 export const getPersona = async (req: Request, res: Response) => {
   const { id }: any = req.params;
   const persona = await Persona.findByPk(id, {
-    include: Nacionalidades
+    include: [Users, Nacionalidades]
   
   });
 

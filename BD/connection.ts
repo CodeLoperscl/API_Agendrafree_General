@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-const db = new Sequelize("af_paciente", "root", "", {
+const db = new Sequelize("agendafree_bd", "root", "", {
 host: "localhost",
 dialect: "mysql",
 define: {

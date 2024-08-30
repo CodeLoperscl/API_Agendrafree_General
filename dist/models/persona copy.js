@@ -12,6 +12,9 @@ const Persona = connection_1.default.define("persona", {
     apellido: {
         type: sequelize_1.DataTypes.STRING,
     },
+    id_usuario: {
+        type: sequelize_1.DataTypes.INTEGER,
+    },
     rut: {
         type: sequelize_1.DataTypes.STRING,
     },

@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import db from "../BD/connection";
 
-const Persona = db.define("persona", {
+const Persona = db.define("personas", {
   nombre: {
     type: DataTypes.STRING,
   },
@@ -11,17 +11,17 @@ const Persona = db.define("persona", {
   rut: {
     type: DataTypes.STRING,
   },
-  id_nacionalidad: {
-    type: DataTypes.INTEGER,
-  },
   email: {
     type: DataTypes.STRING,
   },
   fono: {
     type: DataTypes.STRING,
   },
-  estado: {
-    type: DataTypes.BOOLEAN,
+  nacionalidad_id: {
+    type: DataTypes.INTEGER,
+  },
+  usuario_id: {
+    type: DataTypes.INTEGER,
   }
   
 });

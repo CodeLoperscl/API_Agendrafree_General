@@ -9,19 +9,19 @@ const Cita = connection_agenda_especialista_1.default.define("citas", {
     fecha: {
         type: sequelize_1.DataTypes.DATE,
     },
-    id_estado: {
+    estado_cita_id: {
         type: sequelize_1.DataTypes.INTEGER,
     },
-    id_paciente: {
+    paciente_id: {
         type: sequelize_1.DataTypes.INTEGER,
     },
-    id_especialista: {
+    prevision_id: {
         type: sequelize_1.DataTypes.INTEGER,
     },
-    id_prevision: {
+    especialista_id: {
         type: sequelize_1.DataTypes.INTEGER,
     },
-    id_hora: {
+    hora_id: {
         type: sequelize_1.DataTypes.INTEGER,
     },
 });

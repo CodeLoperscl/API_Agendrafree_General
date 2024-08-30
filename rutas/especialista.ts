@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { validarjwt } from "../middlewares/validarToken";
-import { getEspecialista, getEspecialistas, postEspecialista, putEspecialista, deleteEspecialista } from "../controllers/especialista";
+import { getEspecialista,getEspecialistas,postEspecialista,putEspecialista,deleteEspecialista } from "../controllers/especialista";
 
 const route = Router();
 

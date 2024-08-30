@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
-const db = new sequelize_1.Sequelize("af_paciente", "root", "", {
+const db = new sequelize_1.Sequelize("agendafree_bd", "root", "", {
     host: "localhost",
     dialect: "mysql",
     define: {

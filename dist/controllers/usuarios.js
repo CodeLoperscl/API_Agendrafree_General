@@ -12,10 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUsuario = exports.putUsuario = exports.postUsuario = exports.getUser = exports.getUsers = void 0;
+exports.deleteUsuario = exports.putUsuario = exports.postUsuario = exports.getUser_uid = exports.getUser = exports.getUsers = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const estado_usuario_1 = __importDefault(require("../models/estado_usuario"));
+const persona_1 = __importDefault(require("../models/persona"));
+const profesional_1 = __importDefault(require("../models/profesional"));
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield usuario_1.default.findAll({
         include: estado_usuario_1.default
@@ -26,7 +28,7 @@ exports.getUsers = getUsers;
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const user = yield usuario_1.default.findByPk(id, {
-        include: estado_usuario_1.default
+    // include: Estados_usuarios
     });
     if (user) {
         res.json(user);
@@ -38,6 +40,32 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUser = getUser;
+const getUser_uid = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { uid } = req.params;
+    const user = yield usuario_1.default.findOne({
+        where: { uid },
+        include: [{
+                model: persona_1.default,
+                include: [profesional_1.default]
+            }]
+    });
+    if (user) {
+        // if(user.personas.profesionales.habilitado){
+        // res.json(user);
+        res.json(user);
+        // }else{
+        //   res.status(404).json({
+        //     msg: `El profesional ${user.personas.nombre} se encuentra deshabilitado`,
+        //   });
+        // }
+    }
+    else {
+        res.status(404).json({
+            msg: `No existe el usuario con la id ${uid}`,
+        });
+    }
+});
+exports.getUser_uid = getUser_uid;
 const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     const { user_name, password } = body;

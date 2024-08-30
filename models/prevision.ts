@@ -1,10 +1,13 @@
 import { DataTypes } from "sequelize";
-import db from "../BD/connection";
+import db_especialista from "../BD/connection_agenda_especialista";
 
-const Prevision = db.define("previsiones", {
+const Prevision = db_especialista.define("previsiones", {
   nombre: {
     type: DataTypes.STRING,
-  }
+  },
+  estado_id: {
+    type: DataTypes.INTEGER,
+  },
   
 });
 export default Prevision;

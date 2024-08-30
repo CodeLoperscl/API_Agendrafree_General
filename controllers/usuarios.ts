@@ -2,6 +2,8 @@ import Users from "../models/usuario";
 import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
 import Estados_usuarios from "../models/estado_usuario";
+import Persona from "../models/persona";
+import Profesional from "../models/profesional";
 
 export const getUsers = async (req: Request, res: Response) => {
   const users = await Users.findAll({
@@ -14,7 +16,7 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
   const { id }: any = req.params;
   const user = await Users.findByPk(id, {
-  include: Estados_usuarios
+  // include: Estados_usuarios
   
   });
 
@@ -27,6 +29,31 @@ export const getUser = async (req: Request, res: Response) => {
   }
 };
 
+export const getUser_uid = async (req: Request, res: Response) => {
+  const { uid }: any = req.params;
+  const user:any = await Users.findOne({
+    where: {uid},
+    include:[ {
+      model: Persona, 
+      include: [Profesional]
+    }]
+  });
+
+  if (user) {
+    // if(user.personas.profesionales.habilitado){
+      // res.json(user);
+      res.json(user);
+    // }else{
+    //   res.status(404).json({
+    //     msg: `El profesional ${user.personas.nombre} se encuentra deshabilitado`,
+    //   });
+    // }
+  } else {
+    res.status(404).json({
+      msg: `No existe el usuario con la id ${uid}`,
+    });
+  }
+};
 export const postUsuario = async (req: Request, res: Response) => {
   const { body } = req;
   const { user_name, password } = body;

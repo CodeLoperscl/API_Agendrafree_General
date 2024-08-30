@@ -9,9 +9,6 @@ const Nacionalidades = connection_1.default.define("nacionalidades", {
     nombre: {
         type: sequelize_1.DataTypes.STRING,
     },
-    estado: {
-        type: sequelize_1.DataTypes.BOOLEAN,
-    },
 });
 exports.default = Nacionalidades;
 //# sourceMappingURL=nacionalidad.js.map

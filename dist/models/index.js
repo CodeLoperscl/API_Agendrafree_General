@@ -13,44 +13,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.syncModels = void 0;
-const cita_1 = __importDefault(require("./cita"));
-const estados_1 = __importDefault(require("./estados"));
-const estado_usuario_1 = __importDefault(require("./estado_usuario"));
+// BD paciente
 const usuario_1 = __importDefault(require("./usuario"));
-const paciente_1 = __importDefault(require("./paciente"));
-const hora_disponible_1 = __importDefault(require("./hora_disponible"));
-const especialista_1 = __importDefault(require("./especialista"));
-const prevision_1 = __importDefault(require("./prevision"));
+const estado_usuario_1 = __importDefault(require("./estado_usuario"));
 const persona_1 = __importDefault(require("./persona"));
 const nacionalidad_1 = __importDefault(require("./nacionalidad"));
-const estados_2 = __importDefault(require("./estados"));
-const archivo_1 = __importDefault(require("./archivo"));
+const profesional_1 = __importDefault(require("./profesional"));
+const especialista_1 = __importDefault(require("./especialista"));
 const especialidad_1 = __importDefault(require("./especialidad"));
-const tipo_archivo_1 = __importDefault(require("./tipo_archivo"));
-const servicios_1 = __importDefault(require("./servicios"));
 // Establecer las asociaciones
 //belongsto = 1 a 1
 //hasmany = 1 a N
-//bd_agendafree
-estado_usuario_1.default.hasMany(usuario_1.default, { foreignKey: "estado" });
-usuario_1.default.belongsTo(estado_usuario_1.default, { foreignKey: "estado" });
-nacionalidad_1.default.hasMany(persona_1.default, { foreignKey: "id_nacionalidad" });
-persona_1.default.belongsTo(nacionalidad_1.default, { foreignKey: "id_nacionalidad" });
-//bd_agendafree_especialista   CITA -> X
-cita_1.default.belongsTo(estados_1.default, { foreignKey: "id_estado" });
-cita_1.default.belongsTo(paciente_1.default, { foreignKey: "id_paciente" });
-cita_1.default.belongsTo(especialista_1.default, { foreignKey: "id_especialista" });
-cita_1.default.belongsTo(prevision_1.default, { foreignKey: "id_prevision" });
-cita_1.default.belongsTo(hora_disponible_1.default, { foreignKey: "id_hora" });
-//bd_agendafree_especialista X - >Cita
-estados_1.default.hasMany(cita_1.default, { foreignKey: "id_estado" });
-paciente_1.default.hasMany(cita_1.default, { foreignKey: "id_paciente" });
-especialista_1.default.hasMany(cita_1.default, { foreignKey: "id_especialista" });
-prevision_1.default.hasMany(cita_1.default, { foreignKey: "id_prevision" });
-hora_disponible_1.default.hasMany(cita_1.default, { foreignKey: "id_hora" });
-//Persona -> paciente
-// Persona.belongsTo(Paciente, {foreignKey: "id_persona" })//utilizamos FK paciente
-// Paciente.belongsTo(Persona, {foreignKey: "id_persona"})
+//bd_paciente
+//usuario
+estado_usuario_1.default.hasMany(usuario_1.default, { foreignKey: "estado_id" });
+usuario_1.default.belongsTo(estado_usuario_1.default, { foreignKey: "estado_id" });
+//Persona
+nacionalidad_1.default.hasMany(persona_1.default, { foreignKey: "nacionalidad_id" }); //FK nacionalidad_id
+persona_1.default.belongsTo(nacionalidad_1.default, { foreignKey: "nacionalidad_id" }); //FK nacionalidad_id
+usuario_1.default.hasMany(persona_1.default, { foreignKey: "usuario_id" }); //FK usuario_id
+persona_1.default.belongsTo(usuario_1.default, { foreignKey: "usuario_id" }); //FK usuario_id
+//has many = va a buscar a la otra tabla la "id"
+//BELONG TO = buscar en la misma tabla el atributo fk
+//targetkey
+//Especialidad
+profesional_1.default.belongsTo(persona_1.default, { foreignKey: "persona_id" }); //FK especialista_id
+persona_1.default.hasMany(profesional_1.default, { foreignKey: "persona_id" });
+especialidad_1.default.belongsTo(especialista_1.default, { foreignKey: "especialista_id" }); //FK especialista_id
+especialista_1.default.hasMany(especialidad_1.default, { foreignKey: "especialista_id" });
 // //especialista x -> especialidades
 // Especialista.belongsTo(Especialidad, {foreignKey: "id_especialidad"})
 const syncModels = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,19 +49,20 @@ const syncModels = () => __awaiter(void 0, void 0, void 0, function* () {
         yield estado_usuario_1.default.sync({ alter: false });
         yield usuario_1.default.sync({ alter: false });
         yield nacionalidad_1.default.sync({ alter: false });
+        yield profesional_1.default.sync({ alter: false });
         yield persona_1.default.sync({ alter: false });
-        //bd agendafree_especialista
-        yield cita_1.default.sync({ alter: false });
-        yield estados_1.default.sync({ alter: false });
-        yield paciente_1.default.sync({ alter: false });
-        yield prevision_1.default.sync({ alter: false });
-        yield estados_2.default.sync({ alter: false });
-        yield archivo_1.default.sync({ alter: false });
-        yield tipo_archivo_1.default.sync({ alter: false });
-        yield especialista_1.default.sync({ alter: false });
-        yield especialidad_1.default.sync({ alter: false });
-        yield servicios_1.default.sync({ alter: false });
-        yield hora_disponible_1.default.sync({ alter: false });
+        // //bd agendafree_especialista
+        // await Cita.sync({ alter: false });
+        // await Estado_Cita.sync({ alter: false });
+        // await Paciente.sync({ alter: false });
+        // await Prevision.sync({ alter: false });
+        // await Estado.sync({ alter: false });
+        // await Archivo.sync({ alter: false });
+        // await Tipos_archivos.sync({ alter: false });
+        // await Especialista.sync({ alter: false });
+        // await Especialidad.sync({ alter: false });
+        // await Servicio.sync({ alter: false });
+        // await Hora_disponible.sync({ alter: false });
         console.log("Modelos sincronizados correctamente");
     }
     catch (error) {

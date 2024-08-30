@@ -12,47 +12,62 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePaciente = exports.putPaciente = exports.postPaciente = exports.getPaciente = exports.getPacientes = void 0;
-const paciente_1 = __importDefault(require("../models/paciente"));
-const getPacientes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const pacientes = yield paciente_1.default.findAll({
-    // include: Persona
+exports.deleteMaqueta = exports.putMaqueta = exports.postMaqueta = exports.getMaqueta = exports.getMaquetas = void 0;
+const maqueta_1 = __importDefault(require("../models/maqueta"));
+const nacionalidad_1 = __importDefault(require("../models/nacionalidad"));
+const getMaquetas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const maquetas = yield maqueta_1.default.findAll({
+        include: nacionalidad_1.default,
     });
-    res.json({ pacientes });
+    res.json({ maquetas });
 });
-exports.getPacientes = getPacientes;
-const getPaciente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getMaquetas = getMaquetas;
+const getMaqueta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const paciente = yield paciente_1.default.findByPk(id, {
-    //include: Persona
+    const maqueta = yield maqueta_1.default.findByPk(id, {
+        include: nacionalidad_1.default
     });
-    if (paciente) {
-        res.json(paciente);
+    if (maqueta) {
+        res.json(maqueta);
     }
     else {
         res.status(404).json({
-            msg: `No existe el paciente con la id ${id}`,
+            msg: `No existe una maqueta con la id ${id}`,
         });
     }
 });
-exports.getPaciente = getPaciente;
-const postPaciente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getMaqueta = getMaqueta;
+// export const getMaqueta_rut = async (req: Request, res: Response) => {
+//   const { rut }: any = req.params;
+//   const maqueta = await Maqueta.findOne({ 
+//     where: {rut},
+//     include: Nacionalidades
+//     });
+//   if (maqueta) {
+//     res.json(maqueta);
+//   } else {
+//   res.status(404).json({
+//       msg: `No existe una maqueta con el rut: ${rut}`,
+//   });
+//   }
+// };
+const postMaqueta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { uid, id_persona, id_prevision } = body;
+    const { usuario, contraseña } = body;
     try {
-        const existePaciente = yield paciente_1.default.findOne({
+        const existeMaqueta = yield maqueta_1.default.findOne({
             where: {
-                uid,
+                usuario,
             },
         });
-        if (existePaciente) {
+        if (existeMaqueta) {
             return res.status(400).json({
-                msg: "Ya existe un usuario con este rut " + uid,
+                msg: "Ya existe una maqueta con este usuario " + usuario,
             });
         }
-        const paciente = yield paciente_1.default.create({ uid, id_persona, id_prevision });
+        const maqueta = yield maqueta_1.default.create({ usuario, contraseña });
         // res.json(psswd);
-        res.json(paciente);
+        res.json(maqueta);
     }
     catch (error) {
         console.log(error);
@@ -61,19 +76,19 @@ const postPaciente = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
 });
-exports.postPaciente = postPaciente;
-const putPaciente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.postMaqueta = postMaqueta;
+const putMaqueta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { body } = req;
     try {
-        const paciente = yield paciente_1.default.findByPk(id);
-        if (!paciente) {
+        const maqueta = yield maqueta_1.default.findByPk(id);
+        if (!maqueta) {
             return res.status(404).json({
-                msg: "No existe un paciente con el id " + id,
+                msg: "No existe una maqueta con el id " + id,
             });
         }
-        yield paciente.update(body);
-        res.json(paciente);
+        yield maqueta.update(body);
+        res.json(maqueta);
     }
     catch (error) {
         console.log(error);
@@ -82,18 +97,18 @@ const putPaciente = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
 });
-exports.putPaciente = putPaciente;
-const deletePaciente = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.putMaqueta = putMaqueta;
+const deleteMaqueta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const paciente = yield paciente_1.default.findByPk(id);
-    if (!paciente) {
+    const maqueta = yield maqueta_1.default.findByPk(id);
+    if (!maqueta) {
         return res.status(404).json({
-            msg: "No existe un paciente con el id " + id,
+            msg: "No existe una maqueta con el id " + id,
         });
     }
-    yield paciente.update({ estado: false });
+    yield maqueta.update({ estado: false });
     // await estado_usuario.destroy();
-    res.json(paciente);
+    res.json(maqueta);
 });
-exports.deletePaciente = deletePaciente;
+exports.deleteMaqueta = deleteMaqueta;
 //# sourceMappingURL=paciente.js.map

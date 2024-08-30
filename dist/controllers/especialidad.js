@@ -14,14 +14,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteEspecialidad = exports.putEspecialidad = exports.postEspecialidad = exports.getEspecialidad = exports.getEspecialidades = void 0;
 const especialidad_1 = __importDefault(require("../models/especialidad"));
+const especialista_1 = __importDefault(require("../models/especialista"));
 const getEspecialidades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const especialidades = yield especialidad_1.default.findAll();
+    const especialidades = yield especialidad_1.default.findAll({
+        include: especialista_1.default
+    });
     res.json({ especialidades });
 });
 exports.getEspecialidades = getEspecialidades;
 const getEspecialidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const especialidad = yield especialidad_1.default.findByPk(id);
+    const especialidad = yield especialidad_1.default.findByPk(id, {
+        include: especialista_1.default
+    });
     if (especialidad) {
         res.json(especialidad);
     }
@@ -32,22 +37,35 @@ const getEspecialidad = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getEspecialidad = getEspecialidad;
+// export const getEspecialidad_rut = async (req: Request, res: Response) => {
+//   const { rut }: any = req.params;
+//   const especialidad = await Especialidad.findOne({ 
+//     where: {rut},
+//     include: Nacionalidades
+//     });
+//   if (especialidad) {
+//     res.json(especialidad);
+//   } else {
+//   res.status(404).json({
+//       msg: `No existe una especialidad con el rut: ${rut}`,
+//   });
+//   }
+// };
 const postEspecialidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { nombre, id_especialista, abreviatura } = body;
+    const { usuario, contraseña } = body;
     try {
         const existeEspecialidad = yield especialidad_1.default.findOne({
             where: {
-                nombre,
+                usuario,
             },
         });
         if (existeEspecialidad) {
             return res.status(400).json({
-                msg: "Ya existe una Especialidad con este nombre " + existeEspecialidad,
+                msg: "Ya existe una especialidad con este usuario " + usuario,
             });
         }
-        //cambie el nombre de la columna especialidad a nombre en la tabla especialidades
-        const especialidad = yield especialidad_1.default.create({ nombre, id_especialista, abreviatura });
+        const especialidad = yield especialidad_1.default.create({ usuario, contraseña });
         // res.json(psswd);
         res.json(especialidad);
     }
@@ -66,7 +84,7 @@ const putEspecialidad = (req, res) => __awaiter(void 0, void 0, void 0, function
         const especialidad = yield especialidad_1.default.findByPk(id);
         if (!especialidad) {
             return res.status(404).json({
-                msg: "No existe una archivo con el id " + id,
+                msg: "No existe una especialidad con el id " + id,
             });
         }
         yield especialidad.update(body);
@@ -85,7 +103,7 @@ const deleteEspecialidad = (req, res) => __awaiter(void 0, void 0, void 0, funct
     const especialidad = yield especialidad_1.default.findByPk(id);
     if (!especialidad) {
         return res.status(404).json({
-            msg: "No existe una archivo con el id " + id,
+            msg: "No existe una especialidad con el id " + id,
         });
     }
     yield especialidad.update({ estado: false });

@@ -15,9 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePersona = exports.putPersona = exports.postPersona = exports.getPersona_rut = exports.getPersona = exports.getPersonas = void 0;
 const persona_1 = __importDefault(require("../models/persona"));
 const nacionalidad_1 = __importDefault(require("../models/nacionalidad"));
+const usuario_1 = __importDefault(require("../models/usuario"));
 const getPersonas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const personas = yield persona_1.default.findAll({
-        include: nacionalidad_1.default
+        include: [nacionalidad_1.default, usuario_1.default,]
     });
     res.json({ personas });
 });
@@ -25,7 +26,7 @@ exports.getPersonas = getPersonas;
 const getPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const persona = yield persona_1.default.findByPk(id, {
-        include: nacionalidad_1.default
+        include: [usuario_1.default, nacionalidad_1.default]
     });
     if (persona) {
         res.json(persona);

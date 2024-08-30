@@ -13,34 +13,41 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+// Conexiones BD
 const connection_1 = __importDefault(require("../BD/connection"));
 const connection_agenda_especialista_1 = __importDefault(require("../BD/connection_agenda_especialista"));
-const usuario_1 = __importDefault(require("../rutas/usuario"));
 const auth_1 = __importDefault(require("../rutas/auth"));
+// Routes BD paciente
+const usuario_1 = __importDefault(require("../rutas/usuario"));
 const persona_1 = __importDefault(require("../rutas/persona"));
 const nacionalidades_1 = __importDefault(require("../rutas/nacionalidades"));
 const estado_usuario_1 = __importDefault(require("../rutas/estado_usuario"));
-const paciente_1 = __importDefault(require("../rutas/paciente"));
-const cita_1 = __importDefault(require("../rutas/cita"));
-const estado_cita_1 = __importDefault(require("../rutas/estado_cita"));
-const estados_1 = __importDefault(require("../rutas/estados"));
-const especialista_1 = __importDefault(require("../rutas/especialista"));
+const profesional_1 = __importDefault(require("../rutas/profesional"));
+// Routes BD especialista
+// import pacienteRoutes from "../rutas/paciente";
+// import citaRoutes from "../rutas/cita";
+// import estado_citaRoutes from "../rutas/estado_cita";
+// import estadosRoutes from "../rutas/estados";
+const profesional_2 = __importDefault(require("../rutas/profesional"));
 const prevision_1 = __importDefault(require("../rutas/prevision"));
-const hora_disponible_1 = __importDefault(require("../rutas/hora_disponible"));
-const archivo_1 = __importDefault(require("../rutas/archivo"));
-const tipo_archivo_1 = __importDefault(require("../rutas/tipo_archivo"));
-const servicios_1 = __importDefault(require("../rutas/servicios"));
 const especialidad_1 = __importDefault(require("../rutas/especialidad"));
+// import hora_disponibleRoutes from "../rutas/hora_disponible";
+// import archivoRoutes from "../rutas/archivo";
+// import tipo_archivoRoutes from "../rutas/tipo_archivo";
+// import servicioRoutes from "../rutas/servicios";
 const index_1 = require("./index");
 const cors_1 = __importDefault(require("cors"));
 class Server {
     constructor() {
         this.apiPath = {
-            users: "/api/users",
             login: "/api/auth",
+            //BD paciente
+            users: "/api/users",
             persona: "/api/persona",
             nacionalidad: "/api/nacionalidad",
             estado_usuario: "/api/estado_usuario",
+            profesional: "/api/profesional",
+            // BD especialista 
             paciente: "/api/paciente",
             cita: "/api/cita",
             estado_cita: "/api/estado_cita",
@@ -90,25 +97,28 @@ class Server {
         this.app.use(express_1.default.json()); // Lectura y parceo del body
         this.app.use(express_1.default.static("public")); //Directorio Publico
     }
+    // BD paciente
     routes() {
         this.app.use(this.apiPath.login, auth_1.default);
         this.app.use(this.apiPath.users, usuario_1.default);
         this.app.use(this.apiPath.persona, persona_1.default);
         this.app.use(this.apiPath.nacionalidad, nacionalidades_1.default);
         this.app.use(this.apiPath.estado_usuario, estado_usuario_1.default);
+        this.app.use(this.apiPath.profesional, profesional_1.default);
     }
+    // BD especialista
     routes_bd_especialista() {
-        this.app.use(this.apiPath.paciente, paciente_1.default);
-        this.app.use(this.apiPath.cita, cita_1.default);
-        this.app.use(this.apiPath.estado_cita, estado_cita_1.default);
-        this.app.use(this.apiPath.especialista, especialista_1.default);
-        this.app.use(this.apiPath.prevision, prevision_1.default);
-        this.app.use(this.apiPath.hora_disponible, hora_disponible_1.default);
-        this.app.use(this.apiPath.estado, estados_1.default);
-        this.app.use(this.apiPath.archivo, archivo_1.default);
-        this.app.use(this.apiPath.tipo_archivo, tipo_archivo_1.default);
-        this.app.use(this.apiPath.servicio, servicios_1.default);
+        // this.app.use(this.apiPath.paciente, pacienteRoutes);
+        // this.app.use(this.apiPath.cita, citaRoutes);
+        // this.app.use(this.apiPath.estado_cita, estado_citaRoutes);
+        this.app.use(this.apiPath.especialista, profesional_2.default);
         this.app.use(this.apiPath.especialidad, especialidad_1.default);
+        this.app.use(this.apiPath.prevision, prevision_1.default);
+        // this.app.use(this.apiPath.hora_disponible, hora_disponibleRoutes);
+        // this.app.use(this.apiPath.estado, estadosRoutes);
+        // this.app.use(this.apiPath.archivo, archivoRoutes);
+        // this.app.use(this.apiPath.tipo_archivo, tipo_archivoRoutes);
+        // this.app.use(this.apiPath.servicio, servicioRoutes);
     }
     listen() {
         this.app.listen(this.port, () => {

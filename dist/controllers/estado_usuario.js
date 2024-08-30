@@ -14,25 +14,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteEstado_usuario = exports.putEstado_usuario = exports.postEstado_usuario = exports.getEstado_usuario = exports.getEstados_usuarios = void 0;
 const estado_usuario_1 = __importDefault(require("../models/estado_usuario"));
-const usuario_1 = __importDefault(require("../models/usuario"));
 const getEstados_usuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const estados_usuarios = yield estado_usuario_1.default.findAll({
-        include: usuario_1.default
-    });
+    const estados_usuarios = yield estado_usuario_1.default.findAll({});
     res.json({ estados_usuarios });
 });
 exports.getEstados_usuarios = getEstados_usuarios;
 const getEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const estado_usuario = yield estado_usuario_1.default.findByPk(id, {
-        include: usuario_1.default
-    });
+    const estado_usuario = yield estado_usuario_1.default.findByPk(id, {});
     if (estado_usuario) {
         res.json(estado_usuario);
     }
     else {
         res.status(404).json({
-            msg: `No existe el estado usuario con la id ${id}`,
+            msg: `No existe un estado usuario con la id ${id}`,
         });
     }
 });
@@ -48,12 +43,11 @@ const postEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, funct
         });
         if (existeEstado_usuario) {
             return res.status(400).json({
-                msg: "Ya existe un estado_usuario con este estado " + estado,
+                msg: "Ya existe un estado " + estado,
             });
         }
-        const estado_usuario = yield estado_usuario_1.default.create({ estado });
         // res.json(psswd);
-        res.json(estado_usuario);
+        res.json(existeEstado_usuario);
     }
     catch (error) {
         console.log(error);
@@ -70,7 +64,7 @@ const putEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, functi
         const estado_usuario = yield estado_usuario_1.default.findByPk(id);
         if (!estado_usuario) {
             return res.status(404).json({
-                msg: "No existe un estado_usuario con el id " + id,
+                msg: "No existe un estado con el " + id,
             });
         }
         yield estado_usuario.update(body);
@@ -89,7 +83,7 @@ const deleteEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, fun
     const estado_usuario = yield estado_usuario_1.default.findByPk(id);
     if (!estado_usuario) {
         return res.status(404).json({
-            msg: "No existe un estado_usuario con el id " + id,
+            msg: "No existe un estado usuario con el id " + id,
         });
     }
     yield estado_usuario.update({ estado: false });

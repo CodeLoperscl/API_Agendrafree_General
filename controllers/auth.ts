@@ -14,8 +14,6 @@ export const login = async (req: Request, res: Response) => {
       },
     });
 
- 
-
     if (!user) {
       return res.status(400).json({
         msg: `El usuario con el user_name ${user_name} no existe`,

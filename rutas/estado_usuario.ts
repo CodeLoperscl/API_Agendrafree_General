@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getEstado_usuario, getEstados_usuarios, postEstado_usuario, putEstado_usuario, deleteEstado_usuario } from "../controllers/estado_usuario";
+import { getEstados_usuarios,getEstado_usuario,postEstado_usuario,putEstado_usuario,deleteEstado_usuario } from "../controllers/estado_usuario";
 
 const route = Router();
 

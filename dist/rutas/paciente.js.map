@@ -1,1 +1,1 @@
-{"version":3,"file":"paciente.js","sourceRoot":"","sources":["../../rutas/paciente.ts"],"names":[],"mappings":";;AAAA,qCAAiC;AAEjC,sDAA+G;AAE/G,MAAM,KAAK,GAAG,IAAA,gBAAM,GAAE,CAAC;AAEvB,KAAK,CAAC,GAAG,CAAC,GAAG,EAAE,uBAAY,CAAC,CAAC;AAC7B,KAAK,CAAC,GAAG,CAAC,MAAM,EAAE,sBAAW,CAAC,CAAC;AAC/B,KAAK,CAAC,IAAI,CAAC,GAAG,EAAE,uBAAY,CAAC,CAAC;AAC9B,KAAK,CAAC,GAAG,CAAC,MAAM,EAAE,sBAAW,CAAC,CAAC;AAC/B,KAAK,CAAC,MAAM,CAAC,MAAM,EAAE,yBAAc,CAAC,CAAC;AAErC,kBAAe,KAAK,CAAC"}
+{"version":3,"file":"paciente.js","sourceRoot":"","sources":["../../rutas/paciente.ts"],"names":[],"mappings":""}

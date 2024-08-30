@@ -2,17 +2,17 @@ import { DataTypes } from "sequelize";
 import db_especialista from "../BD/connection_agenda_especialista";
 
 const Archivo = db_especialista.define("archivos", {
-  id_cita: {
-    type: DataTypes.INTEGER,
-  },
-  id_tipoArchivo: {
-    type: DataTypes.INTEGER,
-  },
   ruta_archivo: {
     type: DataTypes.STRING,
   },
-  id_estado_abono: {
-    type: DataTypes.STRING,
+  cita_id: {
+    type: DataTypes.INTEGER,
+  },
+  tipo_archivo_id: {
+    type: DataTypes.INTEGER,
+  },
+  estado_id: {
+    type: DataTypes.INTEGER,
   },
   
 });

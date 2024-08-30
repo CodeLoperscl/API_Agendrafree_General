@@ -1,15 +1,18 @@
 import { DataTypes } from "sequelize";
-import db from "../BD/connection";
+import db_especialista from "../BD/connection_agenda_especialista";
 
-const Especialidad = db.define("especialidades", {
-  nombre: {
+const Especialidad = db_especialista.define("especialidades", {
+  especialidad: {
     type: DataTypes.STRING,
-  },
-  id_especialista: {
-    type: DataTypes.INTEGER,
   },
   abreviatura: {
     type: DataTypes.STRING,
+  },
+  especialista_id: {
+    type: DataTypes.INTEGER,
+  },
+  estado_id: {
+    type:DataTypes.INTEGER,
   },
   
 
