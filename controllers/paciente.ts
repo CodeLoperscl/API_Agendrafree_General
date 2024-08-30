@@ -1,110 +1,107 @@
-import Maqueta from "../models/maqueta";
+import Paciente from "../models/paciente";
 import { Request, Response } from "express";
-import Nacionalidades from "../models/nacionalidad";
+import Persona from "../models/persona";
+import Prevision from "../models/prevision";
+import Estado from "../models/estados";
 
-export const getMaquetas = async (req: Request, res: Response) => {
-    const maquetas = await Maqueta.findAll({
-    include: Nacionalidades, 
-
-  });
-  res.json({ maquetas });
-
+export const getPacientes = async (req: Request, res: Response) => {
+    const pacientes = await Paciente.findAll({
+        include: Prevision,
+    });
+    res.json({ pacientes });
 };
 
-export const getMaqueta = async (req: Request, res: Response) => {
-  const { id }: any = req.params;
-  const maqueta = await Maqueta.findByPk(id, {
-    include: Nacionalidades
-  
-  });
+export const getPaciente = async (req: Request, res: Response) => {
+    const { id }: any = req.params;
+    const paciente = await Paciente.findByPk(id, {
+        include: Prevision,
+    });
 
-  if (maqueta) {
-    res.json(maqueta);
-  } else {
-  res.status(404).json({
-      msg: `No existe una maqueta con la id ${id}`,
-  });
-  }
+    if (paciente) {
+        res.json(paciente);
+    } else {
+        res.status(404).json({
+            msg: `No existe una paciente con la id ${id}`,
+        });
+    }
 };
 
-// export const getMaqueta_rut = async (req: Request, res: Response) => {
+// export const getPaciente_rut = async (req: Request, res: Response) => {
 //   const { rut }: any = req.params;
-//   const maqueta = await Maqueta.findOne({ 
+//   const paciente = await Paciente.findOne({
 //     where: {rut},
 //     include: Nacionalidades
 //     });
 
-
-//   if (maqueta) {
-//     res.json(maqueta);
+//   if (paciente) {
+//     res.json(paciente);
 //   } else {
 //   res.status(404).json({
-//       msg: `No existe una maqueta con el rut: ${rut}`,
+//       msg: `No existe una paciente con el rut: ${rut}`,
 //   });
 //   }
 // };
 
+export const postPaciente = async (req: Request, res: Response) => {
+    const { body } = req;
+    const { persona_id, prevision_id, estado_id } = body;
+    try {
+        const existePaciente = await Paciente.findOne({
+            where: {
+                persona_id
+            },
+        });
 
-export const postMaqueta = async (req: Request, res: Response) => {
-  const { body } = req;
-  const { usuario,contraseña} = body;
-  try {
-    const existeMaqueta = await Maqueta.findOne({
-      where: {
-        usuario,
-      },
-    });
+        if (existePaciente) {
+            return res.status(400).json({
+                msg: "Ya existe una paciente con este usuario " + persona_id,
+            });
+        }
 
-    if (existeMaqueta) {
-      return res.status(400).json({
-        msg: "Ya existe una maqueta con este usuario " + usuario,
-      });
+        const paciente = await Paciente.create({ persona_id, prevision_id, estado_id });
+
+        // res.json(psswd);
+        res.json(paciente);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: "Hable con el administrador",
+        });
     }
-
-    const maqueta = await Maqueta.create({ usuario,contraseña});
-
-    // res.json(psswd);
-    res.json(maqueta);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      msg: "Hable con el administrador",
-    });
-  }
 };
 
-export const putMaqueta = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { body } = req;
+export const putPaciente = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { body } = req;
 
-  try {
-  const maqueta = await Maqueta.findByPk(id);
-  if (!maqueta) {
-      return res.status(404).json({
-      msg: "No existe una maqueta con el id " + id,
-      });
-  }
+    try {
+        const paciente = await Paciente.findByPk(id);
+        if (!paciente) {
+            return res.status(404).json({
+                msg: "No existe una paciente con el id " + id,
+            });
+        }
 
-  await maqueta.update(body);
+        await paciente.update(body);
 
-  res.json(maqueta);
-  } catch (error) {
-  console.log(error);
-  res.status(500).json({
-      msg: "Hable con el administrador",
-  });
-  }
+        res.json(paciente);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: "Hable con el administrador",
+        });
+    }
 };
 
-export const deleteMaqueta = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const maqueta = await Maqueta.findByPk(id);
-  if (!maqueta) {
-  return res.status(404).json({
-      msg: "No existe una maqueta con el id " + id,
-  });
-  }
-  await maqueta.update({ estado: false });
-// await estado_usuario.destroy();
-  res.json(maqueta);
+export const deletePaciente = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const paciente = await Paciente.findByPk(id);
+    if (!paciente) {
+        return res.status(404).json({
+            msg: "No existe una paciente con el id " + id,
+        });
+    }
+    await paciente.update({ estado: false });
+    // await estado_usuario.destroy();
+    res.json(paciente);
 };
