@@ -12,13 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePersona = exports.putPersona = exports.postPersona = exports.getPersona_rut = exports.getPersona = exports.getPersonas = void 0;
+exports.putPersona = exports.postPersona = exports.getPersona_rut = exports.getPersona = exports.getPersonas = void 0;
 const persona_1 = __importDefault(require("../models/persona"));
 const nacionalidad_1 = __importDefault(require("../models/nacionalidad"));
 const usuario_1 = __importDefault(require("../models/usuario"));
+// import Estados from "../models/estado";
 const getPersonas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const personas = yield persona_1.default.findAll({
-        include: [nacionalidad_1.default, usuario_1.default,]
+        include: [nacionalidad_1.default, usuario_1.default]
     });
     res.json({ personas });
 });
@@ -56,7 +57,7 @@ const getPersona_rut = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.getPersona_rut = getPersona_rut;
 const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { nombre, apellido, rut, id_nacionalidad, email, fono, } = body;
+    const { nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id } = body;
     try {
         const existePersona = yield persona_1.default.findOne({
             where: {
@@ -68,7 +69,7 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 msg: "Ya existe una persona con este rut " + rut,
             });
         }
-        const persona = yield persona_1.default.create({ nombre, apellido, rut, id_nacionalidad, email, fono });
+        const persona = yield persona_1.default.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id });
         // res.json(psswd);
         res.json(persona);
     }
@@ -101,17 +102,16 @@ const putPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.putPersona = putPersona;
-const deletePersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    const persona = yield persona_1.default.findByPk(id);
-    if (!persona) {
-        return res.status(404).json({
-            msg: "No existe una persona con el id " + id,
-        });
-    }
-    yield persona.update({ estado: false });
-    // await estado_usuario.destroy();
-    res.json(persona);
-});
-exports.deletePersona = deletePersona;
+// export const deletePersona = async (req: Request, res: Response) => {
+//   const { id } = req.params;
+//   const persona = await Persona.findByPk(id);
+//   if (!persona) {
+//   return res.status(404).json({
+//       msg: "No existe una persona con el id " + id,
+//   });
+//   }
+//   await persona.update({ estado_id: 2 });
+// // await estado_usuario.destroy();
+//   res.json(persona);
+// };
 //# sourceMappingURL=persona.js.map

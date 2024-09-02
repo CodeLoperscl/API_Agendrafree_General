@@ -8,6 +8,6 @@ route.get("/rut/:rut", persona_1.getPersona_rut);
 route.get("/:id", persona_1.getPersona);
 route.post("/", persona_1.postPersona);
 route.put("/:id", persona_1.putPersona);
-route.delete("/:id", persona_1.deletePersona);
+// route.delete("/:id", deletePersona);
 exports.default = route;
 //# sourceMappingURL=persona.js.map

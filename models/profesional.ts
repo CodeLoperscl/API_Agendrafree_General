@@ -2,9 +2,6 @@ import { DataTypes } from "sequelize";
 import db from "../BD/connection";
 
 const Profesional = db.define("profesionales", {
-  habilitado: {
-    type: DataTypes.BOOLEAN,
-  },
   bd_host: {
     type: DataTypes.STRING,
   },
@@ -20,6 +17,9 @@ const Profesional = db.define("profesionales", {
   persona_id: {
     type: DataTypes.INTEGER,
   },
+  estado_id: {
+    type: DataTypes.INTEGER,
+}
   
 });
 export default Profesional;

@@ -2,10 +2,11 @@ import Persona from "../models/persona";
 import { Request, Response } from "express";
 import Nacionalidades from "../models/nacionalidad";
 import Users from "../models/usuario";
+// import Estados from "../models/estado";
 
 export const getPersonas = async (req: Request, res: Response) => {
   const personas = await Persona.findAll({
-    include: [Nacionalidades, Users,] 
+    include: [Nacionalidades, Users] 
 
   });
   res.json({ personas });
@@ -48,7 +49,7 @@ export const getPersona_rut = async (req: Request, res: Response) => {
 
 export const postPersona = async (req: Request, res: Response) => {
   const { body } = req;
-  const { nombre, apellido, rut,id_nacionalidad, email, fono, } = body;
+  const { nombre, apellido, rut, email, fono, nacionalidad_id,usuario_id  } = body;
   try {
     const existePersona = await Persona.findOne({
       where: {
@@ -62,7 +63,7 @@ export const postPersona = async (req: Request, res: Response) => {
       });
     }
 
-    const persona = await Persona.create({ nombre, apellido, rut,id_nacionalidad, email, fono});
+    const persona = await Persona.create({ nombre, apellido, rut, email, fono, nacionalidad_id,usuario_id});
 
     // res.json(psswd);
     res.json(persona);
@@ -97,15 +98,15 @@ export const putPersona = async (req: Request, res: Response) => {
   }
 };
 
-export const deletePersona = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const persona = await Persona.findByPk(id);
-  if (!persona) {
-  return res.status(404).json({
-      msg: "No existe una persona con el id " + id,
-  });
-  }
-  await persona.update({ estado: false });
-// await estado_usuario.destroy();
-  res.json(persona);
-};
+// export const deletePersona = async (req: Request, res: Response) => {
+//   const { id } = req.params;
+//   const persona = await Persona.findByPk(id);
+//   if (!persona) {
+//   return res.status(404).json({
+//       msg: "No existe una persona con el id " + id,
+//   });
+//   }
+//   await persona.update({ estado_id: 2 });
+// // await estado_usuario.destroy();
+//   res.json(persona);
+// };

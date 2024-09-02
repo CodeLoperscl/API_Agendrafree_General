@@ -15,12 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUsuario = exports.putUsuario = exports.postUsuario = exports.getUser_uid = exports.getUser = exports.getUsers = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const estado_usuario_1 = __importDefault(require("../models/estado_usuario"));
+const estado_1 = __importDefault(require("../models/estado"));
 const persona_1 = __importDefault(require("../models/persona"));
 const profesional_1 = __importDefault(require("../models/profesional"));
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield usuario_1.default.findAll({
-        include: estado_usuario_1.default
+        include: estado_1.default
     });
     res.json({ users });
 });
@@ -28,7 +28,7 @@ exports.getUsers = getUsers;
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const user = yield usuario_1.default.findByPk(id, {
-        include: estado_usuario_1.default
+        include: estado_1.default
     });
     if (user) {
         res.json(user);
@@ -68,21 +68,21 @@ const getUser_uid = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getUser_uid = getUser_uid;
 const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { user_name, password } = body;
+    const { uid, username, password } = body;
     try {
         const existeUsuario = yield usuario_1.default.findOne({
             where: {
-                user_name,
+                uid,
             },
         });
         if (existeUsuario) {
             return res.status(400).json({
-                msg: "Ya existe un usuario con este nombre " + user_name,
+                msg: "Ya existe un usuario con este uid " + uid,
             });
         }
         const salto = bcryptjs_1.default.genSaltSync();
         const psswd = bcryptjs_1.default.hashSync(password, salto);
-        const usuario = yield usuario_1.default.create({ user_name, password: psswd });
+        const usuario = yield usuario_1.default.create({ uid, username, password: psswd });
         // res.json(psswd);
         res.json(usuario);
     }
@@ -123,7 +123,7 @@ const deleteUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             msg: "No existe un usuario con el id " + id,
         });
     }
-    yield usuario.update({ estado: false });
+    yield usuario.update({ estado_id: 2 });
     // await usuario.destroy();
     res.json(usuario);
 });

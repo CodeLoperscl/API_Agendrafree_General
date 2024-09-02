@@ -1,11 +1,12 @@
 import { DataTypes } from "sequelize";
 import db from "../BD/connection";
 
-const Estados_usuarios = db.define("estados_usuarios", {
+const Estados = db.define("estados", {
     estado: {
         type: DataTypes.STRING,
     },
+    
 });
 
 
-export default Estados_usuarios;
+export default Estados;

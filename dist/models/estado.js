@@ -5,13 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../BD/connection"));
-const Nacionalidades = connection_1.default.define("nacionalidades", {
-    nombre: {
+const Estados = connection_1.default.define("estados", {
+    estado: {
         type: sequelize_1.DataTypes.STRING,
     },
-    estado_id: {
-        type: sequelize_1.DataTypes.INTEGER,
-    }
 });
-exports.default = Nacionalidades;
-//# sourceMappingURL=nacionalidad.js.map
+exports.default = Estados;
+//# sourceMappingURL=estado.js.map

@@ -1,9 +1,11 @@
+import Estados from "../models/estado";
 import Nacionalidades from "../models/nacionalidad";
 import { Request, Response } from "express";
 
 
 export const getNacionalidades = async (req: Request, res: Response) => {
     const nacionalidades = await Nacionalidades.findAll({
+        include: [Estados]
     });
     res.json({ nacionalidades });
 };
@@ -11,6 +13,7 @@ export const getNacionalidades = async (req: Request, res: Response) => {
 export const getNacionalidad = async (req: Request, res: Response) => {
     const { id }: any = req.params;
     const nacionalidad = await Nacionalidades.findByPk(id, {
+        include: [Estados]
         
     });
 
@@ -40,8 +43,9 @@ export const postNacionalidad = async (req: Request, res: Response) => {
             });
         }
 
-        // res.json(psswd);
-        res.json(existeNacionalidad);
+        const nacionalidad = await Nacionalidades.create({ nombre});
+        res.json(nacionalidad);
+        
     } catch (error) {
         console.log(error);
         res.status(500).json({

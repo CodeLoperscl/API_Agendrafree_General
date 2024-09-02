@@ -65,8 +65,7 @@ const postMaqueta = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 msg: "Ya existe una maqueta con este usuario " + usuario,
             });
         }
-        const maqueta = yield maqueta_1.default.create({ usuario, contraseña });
-        // res.json(psswd);
+        const maqueta = yield maqueta_1.default.create({ usuario });
         res.json(maqueta);
     }
     catch (error) {

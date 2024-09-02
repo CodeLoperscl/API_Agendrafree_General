@@ -12,18 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteEstado_usuario = exports.putEstado_usuario = exports.postEstado_usuario = exports.getEstado_usuario = exports.getEstados_usuarios = void 0;
+exports.deleteEstado = exports.putEstado = exports.postEstado = exports.getEstado = exports.getEstados = void 0;
 const estado_1 = __importDefault(require("../models/estado"));
-const getEstados_usuarios = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const estados_usuarios = yield estado_1.default.findAll({});
-    res.json({ estados_usuarios });
+const getEstados = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const estados = yield estado_1.default.findAll({});
+    res.json({ estados });
 });
-exports.getEstados_usuarios = getEstados_usuarios;
-const getEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getEstados = getEstados;
+const getEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const estado_usuario = yield estado_1.default.findByPk(id, {});
-    if (estado_usuario) {
-        res.json(estado_usuario);
+    const estado = yield estado_1.default.findByPk(id, {});
+    if (estado) {
+        res.json(estado);
     }
     else {
         res.status(404).json({
@@ -31,24 +31,23 @@ const getEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, functi
         });
     }
 });
-exports.getEstado_usuario = getEstado_usuario;
-const postEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getEstado = getEstado;
+const postEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     const { estado } = body;
     try {
-        const existeEstado_usuario = yield estado_1.default.findOne({
+        const existeEstado = yield estado_1.default.findOne({
             where: {
                 estado,
             },
         });
-        if (existeEstado_usuario) {
+        if (existeEstado) {
             return res.status(400).json({
-                msg: "Ya existe un estado " + estado,
+                msg: "Ya existe una maqueta con este usuario " + estado,
             });
         }
-        const estado_usuario = yield estado_1.default.create({ estado });
-        // res.json(psswd);
-        res.json(estado_usuario);
+        const Estado = yield estado_1.default.create({ estado });
+        res.json(Estado);
     }
     catch (error) {
         console.log(error);
@@ -57,19 +56,19 @@ const postEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, funct
         });
     }
 });
-exports.postEstado_usuario = postEstado_usuario;
-const putEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.postEstado = postEstado;
+const putEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { body } = req;
     try {
-        const estado_usuario = yield estado_1.default.findByPk(id);
-        if (!estado_usuario) {
+        const Estado = yield estado_1.default.findByPk(id);
+        if (!Estado) {
             return res.status(404).json({
                 msg: "No existe un estado con el " + id,
             });
         }
-        yield estado_usuario.update(body);
-        res.json(estado_usuario);
+        yield Estado.update(body);
+        res.json(Estado);
     }
     catch (error) {
         console.log(error);
@@ -78,18 +77,18 @@ const putEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, functi
         });
     }
 });
-exports.putEstado_usuario = putEstado_usuario;
-const deleteEstado_usuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.putEstado = putEstado;
+const deleteEstado = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const estado_usuario = yield estado_1.default.findByPk(id);
-    if (!estado_usuario) {
+    const Estado = yield estado_1.default.findByPk(id);
+    if (!Estado) {
         return res.status(404).json({
             msg: "No existe un estado usuario con el id " + id,
         });
     }
-    yield estado_usuario.update({ estado: false });
-    // await estado_usuario.destroy();
-    res.json(estado_usuario);
+    yield Estado.update({ estado: false });
+    // await Estado.destroy();
+    res.json(Estado);
 });
-exports.deleteEstado_usuario = deleteEstado_usuario;
-//# sourceMappingURL=estado_usuario.js.map
+exports.deleteEstado = deleteEstado;
+//# sourceMappingURL=estado.js.map

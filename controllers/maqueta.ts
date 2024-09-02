@@ -61,10 +61,10 @@ export const postMaqueta = async (req: Request, res: Response) => {
       });
     }
 
-    const maqueta = await Maqueta.create({ usuario,contraseña});
 
-    // res.json(psswd);
+    const maqueta = await Maqueta.create({ usuario});
     res.json(maqueta);
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({

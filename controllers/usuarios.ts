@@ -1,7 +1,7 @@
 import Users from "../models/usuario";
 import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
-import Estados_usuarios from "../models/estado_usuario";
+import Estados_usuarios from "../models/estado";
 import Persona from "../models/persona";
 import Profesional from "../models/profesional";
 
@@ -56,24 +56,24 @@ export const getUser_uid = async (req: Request, res: Response) => {
 };
 export const postUsuario = async (req: Request, res: Response) => {
   const { body } = req;
-  const { user_name, password } = body;
+  const { uid,username, password } = body;
   try {
     const existeUsuario = await Users.findOne({
       where: {
-        user_name,
+        uid,
       },
     });
 
     if (existeUsuario) {
       return res.status(400).json({
-        msg: "Ya existe un usuario con este nombre " + user_name,
+        msg: "Ya existe un usuario con este uid " + uid,
       });
     }
 
     const salto = bcryptjs.genSaltSync();
     const psswd = bcryptjs.hashSync(password, salto);
 
-    const usuario = await Users.create({ user_name, password: psswd });
+    const usuario = await Users.create({ uid, username, password: psswd });
 
     // res.json(psswd);
     res.json(usuario);
@@ -116,7 +116,7 @@ export const deleteUsuario = async (req: Request, res: Response) => {
       msg: "No existe un usuario con el id " + id,
     });
   }
-  await usuario.update({ estado: false });
+  await usuario.update({ estado_id: 2 });
   // await usuario.destroy();
   res.json(usuario);
 };
