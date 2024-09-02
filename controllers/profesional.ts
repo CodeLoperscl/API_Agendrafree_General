@@ -2,7 +2,7 @@ import Profesional from "../models/profesional";
 import { Request, Response } from "express";
 import Persona from "../models/persona";
 import Estados from "../models/estado";
-
+//HOLA
 export const getProfesionales = async (req: Request, res: Response) => {
     const profesionales = await Profesional.findAll({
         include: [Persona, Estados]

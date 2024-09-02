@@ -16,6 +16,7 @@ exports.deleteProfesional = exports.putProfesional = exports.postProfesional = e
 const profesional_1 = __importDefault(require("../models/profesional"));
 const persona_1 = __importDefault(require("../models/persona"));
 const estado_1 = __importDefault(require("../models/estado"));
+//HOLA
 const getProfesionales = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const profesionales = yield profesional_1.default.findAll({
         include: [persona_1.default, estado_1.default]
