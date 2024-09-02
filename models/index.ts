@@ -16,6 +16,7 @@ import Archivo from "./archivo";
 import Especialidad from "./especialidad";
 import Tipos_archivos from "./tipo_archivo";
 import Servicio from "./servicios";
+import { BelongsTo } from "sequelize";
 
 
 
@@ -23,27 +24,33 @@ import Servicio from "./servicios";
 //belongsto = 1 a 1
 //hasmany = 1 a N
 
-//bd_paciente
-
+//bd_paciente========================================
 //usuario
 Estados_usuarios.hasMany(Users, { foreignKey: "estado_id" });
 Users.belongsTo(Estados_usuarios, { foreignKey: "estado_id" });
-
 //Persona
 Nacionalidades.hasMany(Persona, {foreignKey: "nacionalidad_id"}); //FK nacionalidad_id
 Persona.belongsTo(Nacionalidades, {foreignKey: "nacionalidad_id"});//FK nacionalidad_id
 Users.hasMany(Persona, {foreignKey: "usuario_id"}); //FK usuario_id
 Persona.belongsTo(Users, {foreignKey: "usuario_id"}); //FK usuario_id
-//has many = va a buscar a la otra tabla la "id"
+//has manny = va a buscar a la otra tabla la "id"
 //BELONG TO = buscar en la misma tabla el atributo fk
 //targetkey
-//Especialidad
 Profesional.belongsTo(Persona, {foreignKey: "persona_id"});//FK especialista_id
 Persona.hasMany(Profesional, {foreignKey: "persona_id"});
 
+
+//bd_paciente========================================
+
+//Archivo ===========================================
+//Archivo - cita_id FK
+Cita.hasMany(Archivo, {foreignKey: "cita_id"}); //FK cita_id
+Archivo.belongsTo(Cita, {foreignKey: "cita_id"}); //FK cita_id
+//Archivo
+
+//Especialidad
 Especialidad.belongsTo(Especialista, {foreignKey: "especialista_id"});//FK especialista_id
 Especialista.hasMany(Especialidad, {foreignKey: "especialista_id"});
-
 
 // //especialista x -> especialidades
 // Especialista.belongsTo(Especialidad, {foreignKey: "id_especialidad"})

@@ -32,7 +32,7 @@ const profesional_2 = __importDefault(require("../rutas/profesional"));
 const prevision_1 = __importDefault(require("../rutas/prevision"));
 const especialidad_1 = __importDefault(require("../rutas/especialidad"));
 // import hora_disponibleRoutes from "../rutas/hora_disponible";
-// import archivoRoutes from "../rutas/archivo";
+const archivo_1 = __importDefault(require("../rutas/archivo"));
 // import tipo_archivoRoutes from "../rutas/tipo_archivo";
 // import servicioRoutes from "../rutas/servicios";
 const index_1 = require("./index");
@@ -116,7 +116,7 @@ class Server {
         this.app.use(this.apiPath.prevision, prevision_1.default);
         // this.app.use(this.apiPath.hora_disponible, hora_disponibleRoutes);
         // this.app.use(this.apiPath.estado, estadosRoutes);
-        // this.app.use(this.apiPath.archivo, archivoRoutes);
+        this.app.use(this.apiPath.archivo, archivo_1.default);
         // this.app.use(this.apiPath.tipo_archivo, tipo_archivoRoutes);
         // this.app.use(this.apiPath.servicio, servicioRoutes);
     }

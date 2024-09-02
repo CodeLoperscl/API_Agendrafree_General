@@ -19,12 +19,15 @@ const estado_usuario_1 = __importDefault(require("./estado_usuario"));
 const persona_1 = __importDefault(require("./persona"));
 const nacionalidad_1 = __importDefault(require("./nacionalidad"));
 const profesional_1 = __importDefault(require("./profesional"));
+// BD especialista
+const cita_1 = __importDefault(require("./cita"));
 const especialista_1 = __importDefault(require("./especialista"));
+const archivo_1 = __importDefault(require("./archivo"));
 const especialidad_1 = __importDefault(require("./especialidad"));
 // Establecer las asociaciones
 //belongsto = 1 a 1
 //hasmany = 1 a N
-//bd_paciente
+//bd_paciente========================================
 //usuario
 estado_usuario_1.default.hasMany(usuario_1.default, { foreignKey: "estado_id" });
 usuario_1.default.belongsTo(estado_usuario_1.default, { foreignKey: "estado_id" });
@@ -33,12 +36,18 @@ nacionalidad_1.default.hasMany(persona_1.default, { foreignKey: "nacionalidad_id
 persona_1.default.belongsTo(nacionalidad_1.default, { foreignKey: "nacionalidad_id" }); //FK nacionalidad_id
 usuario_1.default.hasMany(persona_1.default, { foreignKey: "usuario_id" }); //FK usuario_id
 persona_1.default.belongsTo(usuario_1.default, { foreignKey: "usuario_id" }); //FK usuario_id
-//has many = va a buscar a la otra tabla la "id"
+//has manny = va a buscar a la otra tabla la "id"
 //BELONG TO = buscar en la misma tabla el atributo fk
 //targetkey
-//Especialidad
 profesional_1.default.belongsTo(persona_1.default, { foreignKey: "persona_id" }); //FK especialista_id
 persona_1.default.hasMany(profesional_1.default, { foreignKey: "persona_id" });
+//bd_paciente========================================
+//Archivo ===========================================
+//Archivo - cita_id FK
+cita_1.default.hasMany(archivo_1.default, { foreignKey: "cita_id" }); //FK cita_id
+archivo_1.default.belongsTo(cita_1.default, { foreignKey: "cita_id" }); //FK cita_id
+//Archivo
+//Especialidad
 especialidad_1.default.belongsTo(especialista_1.default, { foreignKey: "especialista_id" }); //FK especialista_id
 especialista_1.default.hasMany(especialidad_1.default, { foreignKey: "especialista_id" });
 // //especialista x -> especialidades

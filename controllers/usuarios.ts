@@ -16,7 +16,7 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
   const { id }: any = req.params;
   const user = await Users.findByPk(id, {
-  // include: Estados_usuarios
+  include: Estados_usuarios
   
   });
 

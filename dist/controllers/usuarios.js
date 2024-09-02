@@ -28,7 +28,7 @@ exports.getUsers = getUsers;
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const user = yield usuario_1.default.findByPk(id, {
-    // include: Estados_usuarios
+        include: estado_usuario_1.default
     });
     if (user) {
         res.json(user);

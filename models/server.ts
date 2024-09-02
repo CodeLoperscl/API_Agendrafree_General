@@ -19,7 +19,7 @@ import especialistaRoutes from "../rutas/profesional";
 import previsiontaRoutes from "../rutas/prevision";
 import especialidadRoutes from "../rutas/especialidad";
 // import hora_disponibleRoutes from "../rutas/hora_disponible";
-// import archivoRoutes from "../rutas/archivo";
+import archivoRoutes from "../rutas/archivo";
 // import tipo_archivoRoutes from "../rutas/tipo_archivo";
 // import servicioRoutes from "../rutas/servicios";
 
@@ -114,7 +114,7 @@ class Server {
     this.app.use(this.apiPath.prevision, previsiontaRoutes);
     // this.app.use(this.apiPath.hora_disponible, hora_disponibleRoutes);
     // this.app.use(this.apiPath.estado, estadosRoutes);
-    // this.app.use(this.apiPath.archivo, archivoRoutes);
+    this.app.use(this.apiPath.archivo, archivoRoutes);
     // this.app.use(this.apiPath.tipo_archivo, tipo_archivoRoutes);
     // this.app.use(this.apiPath.servicio, servicioRoutes);
 
