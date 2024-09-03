@@ -27,95 +27,76 @@ async function data_paciente(url: string): Promise<Paciente> {
 }
 
 // Controlador para obtener todos los especialistas
-export const getPersona_rut_paciente = async (req: Request, res: Response) => {
+export const getPersonas = async (req: Request, res: Response) => {
   try {
-    // Obtener todos los especialistas de la base de datos
-    const paciente = await Persona.findAll({
-      include: [Nacionalidades,Users],
+    // Obtener todos los pacientes de la base de datos
+    const persona = await Persona.findAll({
+      include: [Nacionalidades, Users],
     });
 
-    // Crear un array de promesas para resolver todas las llamadas asíncronas
-    const allPersonas = await Promise.all(
-      paciente.map(async (pac: any) => {
-        try {
-          // Obtener los datos de la paciente para cada persona
-          const pacienteData = await data_paciente(
-            `${process.env.API_URL}paciente/${pac.paciente_id}`
-          );
-
-          // Crear un nuevo objeto combinando los datos de persona y paciente
-          return {
-            ...pac.toJSON(), // Convertir el objeto Sequelize a JSON
-            paciente: pacienteData, // Asignar los datos de la paciente
-          };
-        } catch (error) {
-          console.error(
-            `Error fetching paciente for persona ${pac.id}:`,
-            error
-          );
-
-          // Retornar el persona con null para paciente en caso de error
-          return {
-            ...pac.toJSON(), // Convertir el objeto Sequelize a JSON
-            paciente: null,
-          };
-        }
-      })
-    );
-
-    res.json({ allPersonas });
+    res.json({ persona });
   } catch (error) {
     console.error("Error buscando especialistas:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-export const getPersonas = async (req: Request, res: Response) => {
-  const personas = await Persona.findAll({
-    include: [Nacionalidades, Users] 
-
-  });
-  res.json({ personas });
-
-};
-
 export const getPersona = async (req: Request, res: Response) => {
-  const { id }: any = req.params;
-  const paciente = await Persona.findByPk(id, {
-    include: [Users, Nacionalidades]
-  
-  });
+  try {
+    const { id } = req.params;
+    const persona = await Persona.findByPk(id, {
+      include: [Nacionalidades, Users],
+    });
 
-  if (paciente) {
-    res.json(paciente);
-  } else {
-  res.status(404).json({
-      msg: `No existe una paciente con la id ${id}`,
-  });
+    if (!persona) {
+      return res.status(404).json({
+        msg: `No existe un Persona con la id ${id}`,
+      });
+    }
+
+    return res.json({ persona });
+
+  } catch (error: any) {
+    console.error("Error fetching Persona:", error);
+    return res.status(500).json({
+      msg: "Error al obtener la Persona",
+      error: error.message,
+    });
   }
 };
 
 export const getPersona_rut = async (req: Request, res: Response) => {
+  try {
   const { rut }: any = req.params;
-  const paciente = await Persona.findOne({ 
-    where: {rut},
-    include: [Nacionalidades,Users]
-    });
-
-
-  if (paciente) {
-    res.json(paciente);
-  } else {
-  res.status(404).json({
-      msg: `No existe una paciente con el rut: ${rut}`,
+  console.log(rut);
+  const persona: any = await Persona.findOne({
+    where: { rut },
+    include: [Nacionalidades, Users]
   });
+
+  if (!persona) {
+    return res.status(404).json({
+      msg: `No existe una persona con la rut ${rut}`,
+    });
+  }
+  const paciente = await data_paciente(
+    `${process.env.API_URL}paciente/persona/${persona.id}`  // AGREGAR RUTA Y METODO
+  );
+
+  return res.json({ persona, paciente });
+
+}catch (error: any) {
+    console.error("Error fetching Persona:", error);
+    return res.status(500).json({
+      msg: "Error al obtener la Persona",
+      error: error.message,
+    });
   }
 };
 
-
 export const postPersona = async (req: Request, res: Response) => {
   const { body } = req;
-  const { nombre, apellido, rut, email, fono, nacionalidad_id,usuario_id  } = body;
+  const { nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id } = body;
   try {
     const existePersona = await Persona.findOne({
       where: {
@@ -129,7 +110,7 @@ export const postPersona = async (req: Request, res: Response) => {
       });
     }
 
-    const paciente = await Persona.create({ nombre, apellido, rut, email, fono, nacionalidad_id,usuario_id});
+    const paciente = await Persona.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id });
 
     // res.json(psswd);
     res.json(paciente);
@@ -141,28 +122,28 @@ export const postPersona = async (req: Request, res: Response) => {
   }
 };
 
-export const putPersona = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { body } = req;
+// export const putPersona = async (req: Request, res: Response) => {
+//   const { id } = req.params;
+//   const { body } = req;
 
-  try {
-  const paciente = await Persona.findByPk(id);
-  if (!paciente) {
-      return res.status(404).json({
-      msg: "No existe una paciente con el id " + id,
-      });
-  }
+//   try {
+//     const paciente = await Persona.findByPk(id);
+//     if (!paciente) {
+//       return res.status(404).json({
+//         msg: "No existe una paciente con el id " + id,
+//       });
+//     }
 
-  await paciente.update(body);
+//     await paciente.update(body);
 
-  res.json(paciente);
-  } catch (error) {
-  console.log(error);
-  res.status(500).json({
-      msg: "Hable con el administrador",
-  });
-  }
-};
+//     res.json(paciente);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       msg: "Hable con el administrador",
+//     });
+//   }
+// };
 
 // export const deletePersona = async (req: Request, res: Response) => {
 //   const { id } = req.params;
