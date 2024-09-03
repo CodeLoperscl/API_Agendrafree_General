@@ -15,11 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProfesional = exports.putProfesional = exports.postProfesional = exports.getProfesional = exports.getProfesionales = void 0;
 const profesional_1 = __importDefault(require("../models/profesional"));
 const persona_1 = __importDefault(require("../models/persona"));
-const estado_1 = __importDefault(require("../models/estado"));
 //HOLA
 const getProfesionales = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const profesionales = yield profesional_1.default.findAll({
-        include: [persona_1.default, estado_1.default]
+        include: [persona_1.default]
     });
     res.json({ profesionales });
 });
@@ -27,7 +26,7 @@ exports.getProfesionales = getProfesionales;
 const getProfesional = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const profesional = yield profesional_1.default.findByPk(id, {
-        include: [persona_1.default, estado_1.default]
+        include: [persona_1.default]
     });
     if (profesional) {
         res.json(profesional);
@@ -55,19 +54,19 @@ exports.getProfesional = getProfesional;
 // };
 const postProfesional = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { bd_host, bd_name, bd_pass, bd_url, persona_id } = body;
+    const { persona_id, habilitado, ruta_api } = body;
     try {
         const existeProfesional = yield profesional_1.default.findOne({
             where: {
-                bd_name,
+                persona_id,
             },
         });
         if (existeProfesional) {
             return res.status(400).json({
-                msg: "Ya existe una profesional con esta bd name " + bd_name,
+                msg: "Ya existe una profesional con este persona id: " + persona_id,
             });
         }
-        const profesional = yield profesional_1.default.create({ bd_host, bd_name, bd_pass, bd_url, persona_id });
+        const profesional = yield profesional_1.default.create({ persona_id, habilitado, ruta_api });
         // res.json(psswd);
         res.json(profesional);
     }
@@ -108,7 +107,7 @@ const deleteProfesional = (req, res) => __awaiter(void 0, void 0, void 0, functi
             msg: "No existe una profesional con el id " + id,
         });
     }
-    yield profesional.update({ estado_id: 2 });
+    yield profesional.update({ estado_id: false });
     // await estado_usuario.destroy();
     res.json(profesional);
 });

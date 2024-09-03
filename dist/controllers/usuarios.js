@@ -20,7 +20,7 @@ const persona_1 = __importDefault(require("../models/persona"));
 const profesional_1 = __importDefault(require("../models/profesional"));
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield usuario_1.default.findAll({
-        include: estado_1.default
+        include: [estado_1.default]
     });
     res.json({ users });
 });
@@ -28,7 +28,7 @@ exports.getUsers = getUsers;
 const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const user = yield usuario_1.default.findByPk(id, {
-        include: estado_1.default
+        include: [estado_1.default]
     });
     if (user) {
         res.json(user);

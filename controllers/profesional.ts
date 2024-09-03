@@ -5,7 +5,7 @@ import Estados from "../models/estado";
 //HOLA
 export const getProfesionales = async (req: Request, res: Response) => {
     const profesionales = await Profesional.findAll({
-        include: [Persona, Estados]
+        include: [Persona]
     });
     res.json({ profesionales });
 };
@@ -13,7 +13,7 @@ export const getProfesionales = async (req: Request, res: Response) => {
 export const getProfesional = async (req: Request, res: Response) => {
     const { id }: any = req.params;
     const profesional = await Profesional.findByPk(id, {
-        include: [Persona, Estados]
+        include: [Persona]
     });
 
     if (profesional) {
@@ -43,21 +43,21 @@ export const getProfesional = async (req: Request, res: Response) => {
 
 export const postProfesional = async (req: Request, res: Response) => {
     const { body } = req;
-    const { bd_host, bd_name, bd_pass, bd_url, persona_id } = body;
+    const { persona_id, habilitado, ruta_api } = body;
     try {
         const existeProfesional = await Profesional.findOne({
             where: {
-                bd_name,
+                persona_id,
             },
         });
 
         if (existeProfesional) {
             return res.status(400).json({
-                msg: "Ya existe una profesional con esta bd name " + bd_name,
+                msg: "Ya existe una profesional con este persona id: " + persona_id,
             });
         }
 
-        const profesional = await Profesional.create({bd_host, bd_name, bd_pass, bd_url, persona_id});
+        const profesional = await Profesional.create({persona_id, habilitado, ruta_api});
 
         // res.json(psswd);
         res.json(profesional);
@@ -100,7 +100,7 @@ export const deleteProfesional = async (req: Request, res: Response) => {
             msg: "No existe una profesional con el id " + id,
         });
     }
-    await profesional.update({ estado_id: 2 });
+    await profesional.update({ estado_id: false });
     // await estado_usuario.destroy();
     res.json(profesional);
 };

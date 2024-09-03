@@ -27,6 +27,9 @@ const Persona = connection_1.default.define("personas", {
     usuario_id: {
         type: sequelize_1.DataTypes.INTEGER,
     },
+    paciente_id: {
+        type: sequelize_1.DataTypes.INTEGER,
+    },
 });
 exports.default = Persona;
 //# sourceMappingURL=persona.js.map

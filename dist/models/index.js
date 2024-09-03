@@ -25,26 +25,26 @@ const profesional_1 = __importDefault(require("./profesional"));
 //bd_paciente========================================
 //===================================================================
 //usuario - estado
-estado_1.default.hasMany(usuario_1.default, { foreignKey: "estado_id" });
 usuario_1.default.belongsTo(estado_1.default, { foreignKey: "estado_id" });
+estado_1.default.hasMany(usuario_1.default, { foreignKey: "estado_id" });
 //===================================================================
 //Persona - nacionalidad
-nacionalidad_1.default.hasMany(persona_1.default, { foreignKey: "nacionalidad_id" });
 persona_1.default.belongsTo(nacionalidad_1.default, { foreignKey: "nacionalidad_id" });
-//usuario - persona
-usuario_1.default.hasMany(persona_1.default, { foreignKey: "usuario_id" });
+nacionalidad_1.default.hasMany(persona_1.default, { foreignKey: "nacionalidad_id" });
+//Persona - Usuario
 persona_1.default.belongsTo(usuario_1.default, { foreignKey: "usuario_id" });
+usuario_1.default.hasMany(persona_1.default, { foreignKey: "usuario_id" });
 //===================================================================
 //Profesional - Persona
-persona_1.default.hasMany(profesional_1.default, { foreignKey: "persona_id" });
 profesional_1.default.belongsTo(persona_1.default, { foreignKey: "persona_id" });
+persona_1.default.hasMany(profesional_1.default, { foreignKey: "persona_id" });
 //Profesional - estado
-estado_1.default.hasMany(profesional_1.default, { foreignKey: "estado_id" });
-profesional_1.default.belongsTo(estado_1.default, { foreignKey: "estado_id" });
+// Estado.hasMany(Profesional, {foreignKey: "estado_id"});
+// Profesional.belongsTo(Estado, {foreignKey: "estado_id"});
 //===================================================================
 //nacionalidad - estado
-estado_1.default.hasMany(nacionalidad_1.default, { foreignKey: "estado_id" });
 nacionalidad_1.default.belongsTo(estado_1.default, { foreignKey: "estado_id" });
+estado_1.default.hasMany(nacionalidad_1.default, { foreignKey: "estado_id" });
 const syncModels = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         //bd_agendafree

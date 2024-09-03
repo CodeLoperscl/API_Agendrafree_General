@@ -7,7 +7,7 @@ import Profesional from "../models/profesional";
 
 export const getUsers = async (req: Request, res: Response) => {
   const users = await Users.findAll({
-    include: Estados_usuarios
+    include: [Estados_usuarios]
 
   });
   res.json({ users });
@@ -16,7 +16,8 @@ export const getUsers = async (req: Request, res: Response) => {
 export const getUser = async (req: Request, res: Response) => {
   const { id }: any = req.params;
   const user = await Users.findByPk(id, {
-  include: Estados_usuarios
+    include: [Estados_usuarios]
+
   
   });
 

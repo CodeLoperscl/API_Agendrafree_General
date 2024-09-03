@@ -91,7 +91,7 @@ const deleteNacionalidad = (req, res) => __awaiter(void 0, void 0, void 0, funct
             msg: "No existe un nacionalidad con el id " + id,
         });
     }
-    yield nacionalidad.update({ nacionalidad: false });
+    yield nacionalidad.update({ estado_id: 2 });
     // await nacionalidad.destroy();
     res.json(nacionalidad);
 });

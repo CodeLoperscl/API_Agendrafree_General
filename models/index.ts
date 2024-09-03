@@ -13,32 +13,32 @@ import { BelongsTo } from "sequelize";
 //bd_paciente========================================
 //===================================================================
 //usuario - estado
-Estado.hasMany(Users, { foreignKey: "estado_id" });
 Users.belongsTo(Estado, { foreignKey: "estado_id" });
+Estado.hasMany(Users, { foreignKey: "estado_id" });
 
 //===================================================================
 
 //Persona - nacionalidad
-Nacionalidades.hasMany(Persona, {foreignKey: "nacionalidad_id"}); 
 Persona.belongsTo(Nacionalidades, {foreignKey: "nacionalidad_id"});
-//usuario - persona
-Users.hasMany(Persona, {foreignKey: "usuario_id"}); 
+Nacionalidades.hasMany(Persona, {foreignKey: "nacionalidad_id"}); 
+//Persona - Usuario
 Persona.belongsTo(Users, {foreignKey: "usuario_id"}); 
+Users.hasMany(Persona, {foreignKey: "usuario_id"}); 
 
 //===================================================================
 
 //Profesional - Persona
-Persona.hasMany(Profesional, {foreignKey: "persona_id"});
 Profesional.belongsTo(Persona, {foreignKey: "persona_id"});
+Persona.hasMany(Profesional, {foreignKey: "persona_id"});
 //Profesional - estado
-Estado.hasMany(Profesional, {foreignKey: "estado_id"});
-Profesional.belongsTo(Estado, {foreignKey: "estado_id"});
+// Estado.hasMany(Profesional, {foreignKey: "estado_id"});
+// Profesional.belongsTo(Estado, {foreignKey: "estado_id"});
 
 //===================================================================
 
 //nacionalidad - estado
-Estado.hasMany(Nacionalidades, {foreignKey: "estado_id"});
 Nacionalidades.belongsTo(Estado, {foreignKey: "estado_id"});
+Estado.hasMany(Nacionalidades, {foreignKey: "estado_id"});
 
 export const syncModels = async () => {
 try {

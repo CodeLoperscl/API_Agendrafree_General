@@ -85,7 +85,7 @@ export const deleteNacionalidad = async (req: Request, res: Response) => {
             msg: "No existe un nacionalidad con el id " + id,
         });
     }
-    await nacionalidad.update({ nacionalidad: false });
+    await nacionalidad.update({ estado_id: 2 });
     // await nacionalidad.destroy();
     res.json(nacionalidad);
 };

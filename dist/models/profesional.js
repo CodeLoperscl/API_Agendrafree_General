@@ -6,24 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../BD/connection"));
 const Profesional = connection_1.default.define("profesionales", {
-    bd_host: {
-        type: sequelize_1.DataTypes.STRING,
-    },
-    bd_name: {
-        type: sequelize_1.DataTypes.STRING,
-    },
-    bd_pass: {
-        type: sequelize_1.DataTypes.STRING,
-    },
-    bd_url: {
-        type: sequelize_1.DataTypes.STRING,
-    },
     persona_id: {
         type: sequelize_1.DataTypes.INTEGER,
     },
-    estado_id: {
-        type: sequelize_1.DataTypes.INTEGER,
-    }
+    habilitado: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+    },
+    ruta_api: {
+        type: sequelize_1.DataTypes.STRING,
+    },
 });
 exports.default = Profesional;
 //# sourceMappingURL=profesional.js.map
