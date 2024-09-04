@@ -70,7 +70,6 @@ exports.getPersona = getPersona;
 const getPersona_rut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rut } = req.params;
-        console.log(rut);
         const persona = yield persona_1.default.findOne({
             where: { rut },
             include: [nacionalidad_1.default, usuario_1.default]

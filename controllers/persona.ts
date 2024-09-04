@@ -68,7 +68,6 @@ export const getPersona = async (req: Request, res: Response) => {
 export const getPersona_rut = async (req: Request, res: Response) => {
   try {
   const { rut }: any = req.params;
-  console.log(rut);
   const persona: any = await Persona.findOne({
     where: { rut },
     include: [Nacionalidades, Users]
@@ -79,11 +78,12 @@ export const getPersona_rut = async (req: Request, res: Response) => {
       msg: `No existe una persona con la rut ${rut}`,
     });
   }
+
   const paciente = await data_paciente(
     `${process.env.API_URL}paciente/persona/${persona.id}`  // AGREGAR RUTA Y METODO
   );
 
-  return res.json({ persona, paciente });
+  return res.json({ persona, paciente});
 
 }catch (error: any) {
     console.error("Error fetching Persona:", error);

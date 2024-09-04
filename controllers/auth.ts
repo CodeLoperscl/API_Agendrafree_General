@@ -5,21 +5,21 @@ import Users from "../models/usuario";
 import { generarjwt } from "../helpers/generarJWT";
 
 export const login = async (req: Request, res: Response) => {
-  const { user_name, password } = req.body;
+  const { username, password } = req.body;
 
   try {
     const user: any = await Users.findOne({
       where: {
-        user_name,
+        username,
       },
     });
 
-    if (!user) {
+    if (!user.username) {
       return res.status(400).json({
-        msg: `El usuario con el user_name ${user_name} no existe`,
+        msg: `El usuario con el username ${username} no existe`,
       });
     }
-    if (!user.estado) {
+    if (!user.estado_id) {
       return res.status(400).json({
         msg: `El usuario se encuentra desabilitado`,
       });
@@ -27,7 +27,7 @@ export const login = async (req: Request, res: Response) => {
 
     const validPassword = bcryptjs.compareSync(password, user.password);
     console.log(password, "Contraseña ingresada");
-    console.log(user.password, "Contraseña BD");
+    console.log(user.password, "Contraseña usuario");
     console.log("HOLAAAAAA", validPassword);
 
     if (!validPassword) {

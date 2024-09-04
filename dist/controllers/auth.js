@@ -17,26 +17,26 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const usuario_1 = __importDefault(require("../models/usuario"));
 const generarJWT_1 = require("../helpers/generarJWT");
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { user_name, password } = req.body;
+    const { username, password } = req.body;
     try {
         const user = yield usuario_1.default.findOne({
             where: {
-                user_name,
+                username,
             },
         });
-        if (!user) {
+        if (!user.username) {
             return res.status(400).json({
-                msg: `El usuario con el user_name ${user_name} no existe`,
+                msg: `El usuario con el username ${username} no existe`,
             });
         }
-        if (!user.estado) {
+        if (!user.estado_id) {
             return res.status(400).json({
                 msg: `El usuario se encuentra desabilitado`,
             });
         }
         const validPassword = bcryptjs_1.default.compareSync(password, user.password);
         console.log(password, "Contraseña ingresada");
-        console.log(user.password, "Contraseña BD");
+        console.log(user.password, "Contraseña usuario");
         console.log("HOLAAAAAA", validPassword);
         if (!validPassword) {
             return res.status(400).json({

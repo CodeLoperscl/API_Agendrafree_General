@@ -23,9 +23,6 @@ const Persona = db.define("personas", {
   usuario_id: {
     type: DataTypes.INTEGER,
   },
-  paciente_id: {
-    type: DataTypes.INTEGER,
-  },
   
 });
 export default Persona;
