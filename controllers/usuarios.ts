@@ -4,7 +4,7 @@ import bcryptjs from "bcryptjs";
 import Estados_usuarios from "../models/estado";
 import Persona from "../models/persona";
 import Profesional from "../models/profesional";
-
+//ULtima version 05-09-2024 10:36hrs
 export const getUsers = async (req: Request, res: Response) => {
   const users = await Users.findAll({
     include: [Estados_usuarios]
