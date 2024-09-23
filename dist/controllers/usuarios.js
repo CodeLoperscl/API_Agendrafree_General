@@ -18,6 +18,7 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const estado_1 = __importDefault(require("../models/estado"));
 const persona_1 = __importDefault(require("../models/persona"));
 const profesional_1 = __importDefault(require("../models/profesional"));
+//ULtima version 05-09-2024 10:36hrs
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield usuario_1.default.findAll({
         include: [estado_1.default]

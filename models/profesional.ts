@@ -11,6 +11,9 @@ const Profesional = db.define("profesionales", {
   ruta_api: {
     type: DataTypes.STRING,
   },
+  max_dias_atencion: {
+    type: DataTypes.INTEGER,
+  },
   
 });
 export default Profesional;

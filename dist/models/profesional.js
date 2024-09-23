@@ -15,6 +15,9 @@ const Profesional = connection_1.default.define("profesionales", {
     ruta_api: {
         type: sequelize_1.DataTypes.STRING,
     },
+    max_dias_atencion: {
+        type: sequelize_1.DataTypes.INTEGER,
+    },
 });
 exports.default = Profesional;
 //# sourceMappingURL=profesional.js.map
