@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import axios from "axios";
 import Nacionalidades from "../models/nacionalidad";
 import Users from "../models/usuario";
+import { transporter, mailOptions } from "../config/email";
 
 
 // import Estados from "../models/estado";
@@ -99,20 +100,37 @@ export const postPersona = async (req: Request, res: Response) => {
   const { nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id } = body;
   try {
     const existePersona = await Persona.findOne({
-      where: {
-        rut,
-      },
+      where: { rut },
     });
 
     if (existePersona) {
       return res.status(400).json({
-        msg: "Ya existe una paciente con este rut " + rut,
+        msg: "Ya existe un paciente con este rut " + rut,
       });
     }
 
+    // Crear paciente en la base de datos
     const paciente = await Persona.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id });
 
-    // res.json(psswd);
+    // Configurar el mensaje de bienvenida
+    const emailContent = `
+      <h1>Bienvenido a nuestra clínica, ${nombre} ${apellido}!</h1>
+      <p>Gracias por registrarte. Aquí tienes un resumen de tus datos:</p>
+      <ul>
+        <li><strong>Nombre:</strong> ${nombre}</li>
+        <li><strong>Apellido:</strong> ${apellido}</li>
+        <li><strong>RUT:</strong> ${rut}</li>
+        <li><strong>Email:</strong> ${email}</li>
+        <li><strong>Teléfono:</strong> ${fono}</li>
+      </ul>
+    `;
+
+    // Enviar el correo electrónico
+    await transporter.sendMail(
+      mailOptions(email, 'Bienvenido a nuestra clínica', emailContent)
+    );
+
+    // Responder con los datos del paciente creado
     res.json(paciente);
   } catch (error) {
     console.log(error);
@@ -121,6 +139,35 @@ export const postPersona = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+// export const postPersona = async (req: Request, res: Response) => {
+//   const { body } = req;
+//   const { nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id } = body;
+//   try {
+//     const existePersona = await Persona.findOne({
+//       where: {
+//         rut,
+//       },
+//     });
+
+//     if (existePersona) {
+//       return res.status(400).json({
+//         msg: "Ya existe una paciente con este rut " + rut,
+//       });
+//     }
+
+//     const paciente = await Persona.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id });
+
+//     // res.json(psswd);
+//     res.json(paciente);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       msg: "Hable con el administrador",
+//     });
+//   }
+// };
 
 // export const putPersona = async (req: Request, res: Response) => {
 //   const { id } = req.params;
