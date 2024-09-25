@@ -12,12 +12,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUsuario = exports.putUsuario = exports.postUsuario = exports.getUser_uid = exports.getUser = exports.getUsers = void 0;
+exports.deleteUsuario = exports.putUsuario = exports.postUsuario = exports.getUser_uid = exports.getUser = exports.getUsers = exports.crearUsuario = void 0;
 const usuario_1 = __importDefault(require("../models/usuario"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const estado_1 = __importDefault(require("../models/estado"));
 const persona_1 = __importDefault(require("../models/persona"));
 const profesional_1 = __importDefault(require("../models/profesional"));
+const uuid_1 = require("uuid"); //LIBRERIA UUID
+const crearUsuario = (username) => __awaiter(void 0, void 0, void 0, function* () {
+    const uuid = (0, uuid_1.v4)();
+    const shortUuid = uuid.slice(0, 8); // Limitar el UUID a los primeros 5 caracteres
+    const existeUsuario = yield usuario_1.default.findOne({
+        where: {
+            username,
+        },
+    });
+    if (existeUsuario) {
+        return false;
+    }
+    const salto = bcryptjs_1.default.genSaltSync();
+    const psswd = bcryptjs_1.default.hashSync(shortUuid, salto);
+    const usuario = yield usuario_1.default.create({ uid: shortUuid, username, password: psswd });
+    return usuario;
+});
+exports.crearUsuario = crearUsuario;
 //ULtima version 05-09-2024 10:36hrs
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield usuario_1.default.findAll({
@@ -69,22 +87,14 @@ const getUser_uid = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getUser_uid = getUser_uid;
 const postUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { uid, username, password } = body;
+    const { username } = body;
     try {
-        const existeUsuario = yield usuario_1.default.findOne({
-            where: {
-                uid,
-            },
-        });
-        if (existeUsuario) {
+        const usuario = yield (0, exports.crearUsuario)(username);
+        if (!usuario) {
             return res.status(400).json({
-                msg: "Ya existe un usuario con este uid " + uid,
+                msg: "Ya existe un usuario con este nombre " + username,
             });
         }
-        const salto = bcryptjs_1.default.genSaltSync();
-        const psswd = bcryptjs_1.default.hashSync(password, salto);
-        const usuario = yield usuario_1.default.create({ uid, username, password: psswd });
-        // res.json(psswd);
         res.json(usuario);
     }
     catch (error) {

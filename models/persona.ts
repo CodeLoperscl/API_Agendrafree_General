@@ -24,5 +24,6 @@ const Persona = db.define("personas", {
     type: DataTypes.INTEGER,
   },
   
+  
 });
 export default Persona;

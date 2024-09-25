@@ -4,6 +4,31 @@ import bcryptjs from "bcryptjs";
 import Estados_usuarios from "../models/estado";
 import Persona from "../models/persona";
 import Profesional from "../models/profesional";
+
+import { v4 as uuidv4 } from 'uuid';//LIBRERIA UUID
+
+export const crearUsuario = async(username:string) => {
+  const uuid = uuidv4();
+  const shortUuid = uuid.slice(0, 8);   // Limitar el UUID a los primeros 5 caracteres
+
+      const existeUsuario = await Users.findOne({
+        where: {
+          username,
+        },
+      });
+  
+      if (existeUsuario) {
+        return false;
+      }
+  
+      const salto = bcryptjs.genSaltSync();
+      const psswd = bcryptjs.hashSync(shortUuid, salto);
+  
+      const usuario = await Users.create({ uid: shortUuid , username, password: psswd });
+      return usuario;
+
+}
+
 //ULtima version 05-09-2024 10:36hrs
 export const getUsers = async (req: Request, res: Response) => {
   const users = await Users.findAll({
@@ -55,34 +80,23 @@ export const getUser_uid = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const postUsuario = async (req: Request, res: Response) => {
   const { body } = req;
-  const { uid,username, password } = body;
+  const { username } = body;
   try {
-    const existeUsuario = await Users.findOne({
-      where: {
-        uid,
-      },
-    });
-
-    if (existeUsuario) {
+    const usuario = await crearUsuario(username);
+    if(!usuario){
       return res.status(400).json({
-        msg: "Ya existe un usuario con este uid " + uid,
+        msg: "Ya existe un usuario con este nombre " + username,
       });
     }
-
-    const salto = bcryptjs.genSaltSync();
-    const psswd = bcryptjs.hashSync(password, salto);
-
-    const usuario = await Users.create({ uid, username, password: psswd });
-
-    // res.json(psswd);
     res.json(usuario);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      msg: "Hable con el administrador",
-    });
+      console.log(error);
+      res.status(500).json({
+        msg: "Hable con el administrador",
+      });
   }
 };
 

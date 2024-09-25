@@ -18,6 +18,7 @@ const axios_1 = __importDefault(require("axios"));
 const nacionalidad_1 = __importDefault(require("../models/nacionalidad"));
 const usuario_1 = __importDefault(require("../models/usuario"));
 const email_1 = require("../config/email");
+const usuarios_1 = require("./usuarios");
 // Función para obtener los datos de una paciente
 function data_paciente(url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -34,9 +35,15 @@ function data_paciente(url) {
 // Controlador para obtener todos los especialistas
 const getPersonas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Obtener todos los pacientes de la base de datos
+        // Obtener todos los pacientes de la base de datos, excluyendo 'password' de Users
         const persona = yield persona_1.default.findAll({
-            include: [nacionalidad_1.default, usuario_1.default],
+            include: [
+                nacionalidad_1.default,
+                {
+                    model: usuario_1.default,
+                    attributes: { exclude: ['password'] }, // Excluir el campo 'password'
+                }
+            ],
         });
         res.json({ persona });
     }
@@ -49,18 +56,25 @@ exports.getPersonas = getPersonas;
 const getPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
+        // Obtener una persona por su ID, excluyendo 'password' de Users
         const persona = yield persona_1.default.findByPk(id, {
-            include: [nacionalidad_1.default, usuario_1.default],
+            include: [
+                nacionalidad_1.default,
+                {
+                    model: usuario_1.default,
+                    attributes: { exclude: ['password'] }, // Excluir el campo 'password'
+                }
+            ],
         });
         if (!persona) {
             return res.status(404).json({
-                msg: `No existe un Persona con la id ${id}`,
+                msg: `No existe una Persona con la id ${id}`,
             });
         }
         return res.json({ persona });
     }
     catch (error) {
-        console.error("Error fetching Persona:", error);
+        console.error("Error buscando la Persona:", error);
         return res.status(500).json({
             msg: "Error al obtener la Persona",
             error: error.message,
@@ -105,8 +119,23 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 msg: "Ya existe un paciente con este rut " + rut,
             });
         }
+        const existePersona2 = yield persona_1.default.findOne({
+            where: { email },
+        });
+        if (existePersona2) {
+            return res.status(400).json({
+                msg: "Ya existe un paciente con este email " + email,
+            });
+        }
+        const { id } = yield (0, usuarios_1.crearUsuario)(rut);
+        if (!id) {
+            return res.status(400).json({
+                msg: "Ya existe un usuario con este rut " + rut,
+            });
+        }
+        console.log("idUsuario = ", id);
         // Crear paciente en la base de datos
-        const paciente = yield persona_1.default.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id });
+        const paciente = yield persona_1.default.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id: id });
         // Configurar el mensaje de bienvenida
         const emailContent = `
       <h1>Bienvenido a nuestra clínica, ${nombre} ${apellido}!</h1>
@@ -122,7 +151,7 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         // Enviar el correo electrónico
         yield email_1.transporter.sendMail((0, email_1.mailOptions)(email, 'Bienvenido a nuestra clínica', emailContent));
         // Responder con los datos del paciente creado
-        res.json(paciente);
+        res.json({ paciente, id });
     }
     catch (error) {
         console.log(error);

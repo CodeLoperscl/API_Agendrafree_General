@@ -17,12 +17,14 @@ const Users = db.define("usuarios", {
       
   },
 });
+// Sobrescribir el método toJSON para excluir el campo password
 Users.prototype.toJSON = function () {
   var values = Object.assign({}, this.get());
 
+  // Excluir el campo password
   delete values.password;
+  
   return values;
 };
-
 
 export default Users;

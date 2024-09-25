@@ -4,6 +4,10 @@ import axios from "axios";
 import Nacionalidades from "../models/nacionalidad";
 import Users from "../models/usuario";
 import { transporter, mailOptions } from "../config/email";
+import { Op } from "sequelize";
+import { crearUsuario } from "./usuarios";
+
+
 
 
 // import Estados from "../models/estado";
@@ -30,9 +34,15 @@ async function data_paciente(url: string): Promise<Paciente> {
 // Controlador para obtener todos los especialistas
 export const getPersonas = async (req: Request, res: Response) => {
   try {
-    // Obtener todos los pacientes de la base de datos
+    // Obtener todos los pacientes de la base de datos, excluyendo 'password' de Users
     const persona = await Persona.findAll({
-      include: [Nacionalidades, Users],
+      include: [
+        Nacionalidades,
+        {
+          model: Users,
+          attributes: { exclude: ['password'] }, // Excluir el campo 'password'
+        }
+      ],
     });
 
     res.json({ persona });
@@ -42,29 +52,39 @@ export const getPersonas = async (req: Request, res: Response) => {
   }
 };
 
+
 export const getPersona = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+    
+    // Obtener una persona por su ID, excluyendo 'password' de Users
     const persona = await Persona.findByPk(id, {
-      include: [Nacionalidades, Users],
+      include: [
+        Nacionalidades,
+        {
+          model: Users,
+          attributes: { exclude: ['password'] }, // Excluir el campo 'password'
+        }
+      ],
     });
 
     if (!persona) {
       return res.status(404).json({
-        msg: `No existe un Persona con la id ${id}`,
+        msg: `No existe una Persona con la id ${id}`,
       });
     }
 
     return res.json({ persona });
-
   } catch (error: any) {
-    console.error("Error fetching Persona:", error);
+    console.error("Error buscando la Persona:", error);
     return res.status(500).json({
       msg: "Error al obtener la Persona",
       error: error.message,
     });
   }
 };
+
+
 
 export const getPersona_rut = async (req: Request, res: Response) => {
   try {
@@ -86,7 +106,7 @@ export const getPersona_rut = async (req: Request, res: Response) => {
 
   return res.json({ persona, paciente});
 
-}catch (error: any) {
+  }catch (error: any) {
     console.error("Error fetching Persona:", error);
     return res.status(500).json({
       msg: "Error al obtener la Persona",
@@ -109,8 +129,27 @@ export const postPersona = async (req: Request, res: Response) => {
       });
     }
 
+    const existePersona2 = await Persona.findOne({
+      where: { email },
+    });
+
+    if (existePersona2) {
+      return res.status(400).json({
+        msg: "Ya existe un paciente con este email " + email,
+      });
+    }
+
+
+    const{id}:any = await crearUsuario(rut);
+    if(!id){
+      return res.status(400).json({
+        msg: "Ya existe un usuario con este rut " + rut,
+      });
+    }
+
+    console.log("idUsuario = ", id);
     // Crear paciente en la base de datos
-    const paciente = await Persona.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id });
+    const paciente = await Persona.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id: id });
 
     // Configurar el mensaje de bienvenida
     const emailContent = `
@@ -131,7 +170,7 @@ export const postPersona = async (req: Request, res: Response) => {
     );
 
     // Responder con los datos del paciente creado
-    res.json(paciente);
+    res.json({paciente, id});
   } catch (error) {
     console.log(error);
     res.status(500).json({
