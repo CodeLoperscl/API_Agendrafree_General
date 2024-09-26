@@ -111,27 +111,19 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const { body } = req;
     const { nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id } = body;
     try {
-        const existePersona = yield persona_1.default.findOne({
-            where: { rut },
-        });
+        // Verificar si ya existe una persona con el mismo RUT o correo
+        const existePersona = yield persona_1.default.findOne({ where: { rut } });
         if (existePersona) {
-            return res.status(400).json({
-                msg: "Ya existe un paciente con este rut " + rut,
-            });
+            return res.status(400).json({ msg: "Ya existe un paciente con este rut " + rut });
         }
-        const existePersona2 = yield persona_1.default.findOne({
-            where: { email },
-        });
+        const existePersona2 = yield persona_1.default.findOne({ where: { email } });
         if (existePersona2) {
-            return res.status(400).json({
-                msg: "Ya existe un paciente con este email " + email,
-            });
+            return res.status(400).json({ msg: "Ya existe un paciente con este email " + email });
         }
+        // Crear un usuario asociado a la persona
         const { id } = yield (0, usuarios_1.crearUsuario)(rut);
         if (!id) {
-            return res.status(400).json({
-                msg: "Ya existe un usuario con este rut " + rut,
-            });
+            return res.status(400).json({ msg: "Ya existe un usuario con este rut " + rut });
         }
         console.log("idUsuario = ", id);
         // Crear paciente en la base de datos
@@ -148,19 +140,72 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         <li><strong>Teléfono:</strong> ${fono}</li>
       </ul>
     `;
-        // Enviar el correo electrónico
+        // Enviar el correo electrónico usando el transporter configurado
         yield email_1.transporter.sendMail((0, email_1.mailOptions)(email, 'Bienvenido a nuestra clínica', emailContent));
         // Responder con los datos del paciente creado
         res.json({ paciente, id });
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({
-            msg: "Hable con el administrador",
-        });
+        res.status(500).json({ msg: "Hable con el administrador" });
     }
 });
 exports.postPersona = postPersona;
+// export const postPersona = async (req: Request, res: Response) => {
+//   const { body } = req;
+//   const { nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id } = body;
+//   try {
+//     const existePersona = await Persona.findOne({
+//       where: { rut },
+//     });
+//     if (existePersona) {
+//       return res.status(400).json({
+//         msg: "Ya existe un paciente con este rut " + rut,
+//       });
+//     }
+//     const existePersona2 = await Persona.findOne({
+//       where: { email },
+//     });
+//     if (existePersona2) {
+//       return res.status(400).json({
+//         msg: "Ya existe un paciente con este email " + email,
+//       });
+//     }
+//     const{id}:any = await crearUsuario(rut);
+//     if(!id){
+//       return res.status(400).json({
+//         msg: "Ya existe un usuario con este rut " + rut,
+//       });
+//     }
+//     console.log("idUsuario = ", id);
+//     // Crear paciente en la base de datos
+//     const paciente = await Persona.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id: id });
+//     // Configurar el mensaje de bienvenida
+//     const emailContent = `
+//       <h1>Bienvenido a nuestra clínica, ${nombre} ${apellido}!</h1>
+//       <p>Gracias por registrarte. Aquí tienes un resumen de tus datos:</p>
+//       <ul>
+//         <li><strong>Nombre:</strong> ${nombre}</li>
+//         <li><strong>Apellido:</strong> ${apellido}</li>
+//         <li><strong>RUT:</strong> ${rut}</li>
+//         <li><strong>Email:</strong> ${email}</li>
+//         <li><strong>Teléfono:</strong> ${fono}</li>
+//       </ul>
+//     `;
+//     // Enviar el correo electrónico
+//     await transporter.sendMail(
+//       mailOptions(email, 'Bienvenido a nuestra clínica', emailContent)
+//     );
+//     // Responder con los datos del paciente creado
+//     res.json({paciente, id});
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({
+//       msg: "Hable con el administrador",
+//     });
+//   }
+// };
+//SIN USO DE CORREO
 // export const postPersona = async (req: Request, res: Response) => {
 //   const { body } = req;
 //   const { nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id } = body;
