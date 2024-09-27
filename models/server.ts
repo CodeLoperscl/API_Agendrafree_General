@@ -8,12 +8,14 @@ import personaRoutes from "../rutas/persona";
 import nacionalidadRoutes from "../rutas/nacionalidades";
 import estadoRoutes from "../rutas/estado";
 import profesionalRoutes from "../rutas/profesional";
+import dotenv from 'dotenv';
+
 
 import { syncModels } from "./index";
 
 import cors from "cors";
 
-
+dotenv.config();
 
 class Server {
   private app: Application;

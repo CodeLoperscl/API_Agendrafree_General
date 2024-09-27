@@ -22,8 +22,10 @@ const persona_1 = __importDefault(require("../rutas/persona"));
 const nacionalidades_1 = __importDefault(require("../rutas/nacionalidades"));
 const estado_1 = __importDefault(require("../rutas/estado"));
 const profesional_1 = __importDefault(require("../rutas/profesional"));
+const dotenv_1 = __importDefault(require("dotenv"));
 const index_1 = require("./index");
 const cors_1 = __importDefault(require("cors"));
+dotenv_1.default.config();
 class Server {
     constructor() {
         this.apiPath = {

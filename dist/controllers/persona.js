@@ -109,7 +109,7 @@ const getPersona_rut = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.getPersona_rut = getPersona_rut;
 const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    const { nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id } = body;
+    const { nombre, apellido, rut, email, fono, nacionalidad_id, prevision_id, estado_id } = body;
     try {
         // Verificar si ya existe una persona con el mismo RUT o correo
         const existePersona = yield persona_1.default.findOne({ where: { rut } });
@@ -121,29 +121,47 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             return res.status(400).json({ msg: "Ya existe un paciente con este email " + email });
         }
         // Crear un usuario asociado a la persona
-        const { id } = yield (0, usuarios_1.crearUsuario)(rut);
-        if (!id) {
-            return res.status(400).json({ msg: "Ya existe un usuario con este rut " + rut });
+        const { id: usuario_id } = yield (0, usuarios_1.crearUsuario)(rut);
+        if (!usuario_id) {
+            return res.status(400).json({ msg: "Error al crear el usuario con este rut " + rut });
         }
-        console.log("idUsuario = ", id);
-        // Crear paciente en la base de datos
-        const paciente = yield persona_1.default.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id: id });
+        console.log("idUsuario = ", usuario_id);
+        // Crear persona en la base de datos "general"
+        const persona = yield persona_1.default.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id });
+        // Hacer la solicitud POST a la otra API para crear el paciente en el proyecto "especialista"
+        const pacienteData = {
+            persona_id: usuario_id, // ID de la persona recién creada
+            prevision_id: 1,
+            estado_id: 1,
+        };
+        // URL de la API del proyecto especialista
+        const apiEspecialistaUrl = `${process.env.API_URL}paciente`;
+        console.log('URL del API especialista:', apiEspecialistaUrl);
+        try {
+            // Realizar el POST request para crear al paciente en la otra base de datos
+            const { data: paciente } = yield axios_1.default.post(apiEspecialistaUrl, pacienteData);
+            console.log("Paciente creado en la base de datos especialista:", paciente);
+            // Responder con los datos del persona creada y el paciente asociado
+            res.json({ persona, paciente });
+        }
+        catch (error) {
+            console.error("Error creando paciente en el proyecto especialista:", error);
+            return res.status(500).json({ msg: "Error al crear el paciente en la base de datos especialista" });
+        }
         // Configurar el mensaje de bienvenida
         const emailContent = `
-      <h1>Bienvenido a nuestra clínica, ${nombre} ${apellido}!</h1>
-      <p>Gracias por registrarte. Aquí tienes un resumen de tus datos:</p>
-      <ul>
-        <li><strong>Nombre:</strong> ${nombre}</li>
-        <li><strong>Apellido:</strong> ${apellido}</li>
-        <li><strong>RUT:</strong> ${rut}</li>
-        <li><strong>Email:</strong> ${email}</li>
-        <li><strong>Teléfono:</strong> ${fono}</li>
-      </ul>
-    `;
+    <h1>Bienvenido a nuestra clínica, ${nombre} ${apellido}!</h1>
+    <p>Gracias por registrarte. Aquí tienes un resumen de tus datos:</p>
+    <ul>
+      <li><strong>Nombre:</strong> ${nombre}</li>
+      <li><strong>Apellido:</strong> ${apellido}</li>
+      <li><strong>RUT:</strong> ${rut}</li>
+      <li><strong>Email:</strong> ${email}</li>
+      <li><strong>Teléfono:</strong> ${fono}</li>
+    </ul>
+  `;
         // Enviar el correo electrónico usando el transporter configurado
         yield email_1.transporter.sendMail((0, email_1.mailOptions)(email, 'Bienvenido a nuestra clínica', emailContent));
-        // Responder con los datos del paciente creado
-        res.json({ paciente, id });
     }
     catch (error) {
         console.log(error);
