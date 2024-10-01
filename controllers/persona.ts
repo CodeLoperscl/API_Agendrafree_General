@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import axios from "axios";
 import Nacionalidades from "../models/nacionalidad";
 import Users from "../models/usuario";
-import { transporter, mailOptions } from "../config/email";
+import { generarCorreo } from "../helpers/generarCorreo"; //importamos la funcion de helper
 import { Op } from "sequelize";
 import { crearUsuario } from "./usuarios";
 
@@ -181,8 +181,8 @@ export const postPersona = async (req: Request, res: Response) => {
     </ul>
   `;
 
-  // Enviar el correo electrónico usando el transporter configurado
-  await transporter.sendMail(mailOptions(email, 'Bienvenido a nuestra clínica', emailContent));
+    // Usar la función generarCorreo para enviar el email
+    await generarCorreo(email, 'Bienvenido a nuestra clínica', emailContent);
 
   } catch (error) {
     console.log(error);

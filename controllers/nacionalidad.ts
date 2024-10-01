@@ -1,6 +1,8 @@
+import { generarjwt } from "../helpers/generarJWT";
 import Estados from "../models/estado";
 import Nacionalidades from "../models/nacionalidad";
 import { Request, Response } from "express";
+
 
 
 export const getNacionalidades = async (req: Request, res: Response) => {
@@ -8,6 +10,7 @@ export const getNacionalidades = async (req: Request, res: Response) => {
         include: [Estados]
     });
     res.json({ nacionalidades });
+
 };
 
 export const getNacionalidad = async (req: Request, res: Response) => {

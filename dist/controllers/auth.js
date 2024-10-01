@@ -20,29 +20,28 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
     try {
         const user = yield usuario_1.default.findOne({
-            where: {
-                username,
-            },
+            where: { username },
         });
-        if (!user.username) {
+        if (!user || !user.username) {
             return res.status(400).json({
                 msg: `El usuario con el username ${username} no existe`,
             });
         }
         if (!user.estado_id) {
             return res.status(400).json({
-                msg: `El usuario se encuentra desabilitado`,
+                msg: `El usuario se encuentra deshabilitado`,
             });
         }
+        // Comparación de la contraseña ingresada con la encriptada en la BD
         const validPassword = bcryptjs_1.default.compareSync(password, user.password);
         console.log(password, "Contraseña ingresada");
-        console.log(user.password, "Contraseña usuario");
-        console.log("HOLAAAAAA", validPassword);
+        console.log(user.password, "Contraseña usuario (hash)");
         if (!validPassword) {
             return res.status(400).json({
-                msg: `La contraseña no es valida para este usuario`,
+                msg: `La contraseña no es válida para este usuario`,
             });
         }
+        // Generar token y responder al cliente
         const { id } = user;
         const name = user.user_name;
         const payload = { name, id };
@@ -56,7 +55,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         console.log(error);
         return res.status(500).json({
-            msg: "Algo salio mal, Hable con el Administrador",
+            msg: "Algo salió mal, hable con el administrador",
         });
     }
 });

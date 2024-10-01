@@ -27,11 +27,11 @@ exports.transporter = nodemailer_1.default.createTransport({
     port: 587, // Puerto para conexión TLS
     secure: false, // true para 465, false para otros puertos como 587
     auth: {
-        user: 'info@agendafree.cl', // Tu correo de NinjaHosting
-        pass: process.env.EMAIL_PASS, // La contraseña de tu correo (se recomienda usar variables de entorno)
+        user: 'info@agendafree.cl', // Correo de NinjaHosting
+        pass: process.env.EMAIL_PASS, // La contraseña
     },
     tls: {
-        rejectUnauthorized: false, // Permitir certificados no verificados (útil para servidores que no tienen certificados verificados)
+        rejectUnauthorized: false, // Permitir certificados no verificados
     },
 });
 // Opciones predeterminadas para el correo electrónico

@@ -17,7 +17,7 @@ const persona_1 = __importDefault(require("../models/persona"));
 const axios_1 = __importDefault(require("axios"));
 const nacionalidad_1 = __importDefault(require("../models/nacionalidad"));
 const usuario_1 = __importDefault(require("../models/usuario"));
-const email_1 = require("../config/email");
+const generarCorreo_1 = require("../helpers/generarCorreo"); //importamos la funcion de helper
 const usuarios_1 = require("./usuarios");
 // Función para obtener los datos de una paciente
 function data_paciente(url) {
@@ -160,8 +160,8 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
       <li><strong>Teléfono:</strong> ${fono}</li>
     </ul>
   `;
-        // Enviar el correo electrónico usando el transporter configurado
-        yield email_1.transporter.sendMail((0, email_1.mailOptions)(email, 'Bienvenido a nuestra clínica', emailContent));
+        // Usar la función generarCorreo para enviar el email
+        yield (0, generarCorreo_1.generarCorreo)(email, 'Bienvenido a nuestra clínica', emailContent);
     }
     catch (error) {
         console.log(error);
