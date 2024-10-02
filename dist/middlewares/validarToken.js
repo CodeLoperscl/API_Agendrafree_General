@@ -31,7 +31,7 @@ const validarjwt = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
                 msg: "Token No Valido - Usuario no existe",
             });
         }
-        if (!user.estado) {
+        if (!user.estado_id) {
             return res.status(401).json({
                 msg: "Token No Valido - Usuario desabilitado",
             });

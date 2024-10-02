@@ -6,9 +6,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generarjwt = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const generarjwt = (uid) => {
+    let expira = "1d";
+    if (uid.name == "visita") {
+        expira = "1h";
+    }
     const privateKey = process.env.SECRETORPRIVATEKEY;
     return new Promise((resolve, reject) => {
-        jsonwebtoken_1.default.sign(uid, privateKey, { expiresIn: "365d" }, (error, token) => {
+        jsonwebtoken_1.default.sign(uid, privateKey, { expiresIn: expira }, (error, token) => {
             if (error) {
                 console.log(error);
                 reject("No se pudo generar el token");

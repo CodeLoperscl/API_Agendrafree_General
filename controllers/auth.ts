@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import bcryptjs from "bcryptjs";
 import Users from "../models/usuario";
 import { generarjwt } from "../helpers/generarJWT";
+import { v4 as uuidv4 } from 'uuid';//LIBRERIA UUID
 
 export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
@@ -11,13 +12,11 @@ export const login = async (req: Request, res: Response) => {
     const user: any = await Users.findOne({
       where: { username },
     });
-
     if (!user || !user.username) {
       return res.status(400).json({
         msg: `El usuario con el username ${username} no existe`,
       });
     }
-
     if (!user.estado_id) {
       return res.status(400).json({
         msg: `El usuario se encuentra deshabilitado`,
@@ -37,7 +36,7 @@ export const login = async (req: Request, res: Response) => {
 
     // Generar token y responder al cliente
     const { id } = user;
-    const name = user.user_name;
+    const name = user.username;
     const payload = { name, id };
     const token = await generarjwt(payload);
     

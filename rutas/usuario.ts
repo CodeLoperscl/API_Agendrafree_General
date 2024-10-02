@@ -6,11 +6,11 @@ import { validarjwt } from "../middlewares/validarToken";
 const route = Router();
 
 // route.get("/", [validarjwt], getUsers);
-route.get("/", getUsers);
-route.get("/uid/:uid", getUser_uid);
+route.get("/",[validarjwt], getUsers);
+route.get("/uid/:uid",[validarjwt], getUser_uid);
 route.get("/:id", getUser);
-route.post("/", postUsuario);
-route.put("/:id", putUsuario);
-route.delete("/:id", deleteUsuario);
+route.post("/",[validarjwt], postUsuario);
+route.put("/:id",[validarjwt], putUsuario);
+route.delete("/:id",[validarjwt], deleteUsuario);
 
 export default route;

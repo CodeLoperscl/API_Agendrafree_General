@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { validarjwt } from "../middlewares/validarToken";
-import { getPersonas, getPersona, postPersona ,getPersona_rut } from "../controllers/persona";
+import { getPersonas, getPersona, postPersona ,getPersona_rut, putPersona,deletePersona } from "../controllers/persona";
 
 const route = Router();
 
-route.get("/", getPersonas);
-route.get("/rut/:rut",getPersona_rut);
-route.get("/:id", getPersona);
-route.post("/", postPersona);
-// route.put("/:id", putPersona);
-// route.delete("/:id", deletePersona);
+route.get("/",[validarjwt], getPersonas);
+route.get("/rut/:rut",[validarjwt],getPersona_rut);
+route.get("/:id",[validarjwt], getPersona);
+route.post("/",[validarjwt], postPersona);
+route.put("/:id",[validarjwt], putPersona);
+route.delete("/:id",[validarjwt], deletePersona);
 
 export default route;

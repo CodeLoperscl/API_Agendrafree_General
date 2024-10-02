@@ -4,10 +4,10 @@ import { getProfesional,getProfesionales,postProfesional,putProfesional,deletePr
 
 const route = Router();
 
-route.get("/", getProfesionales);
-route.get("/:id", getProfesional);
-route.post("/", postProfesional);
-route.put("/:id", putProfesional);
-route.delete("/:id", deleteProfesional);
+route.get("/",[validarjwt], getProfesionales);
+route.get("/:id",[validarjwt], getProfesional);
+route.post("/",[validarjwt], postProfesional);
+route.put("/:id",[validarjwt], putProfesional);
+route.delete("/:id",[validarjwt], deleteProfesional);
 
 export default route;

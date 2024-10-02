@@ -19,14 +19,13 @@ export const validarjwt = async (
   try {
     const { id }: any = jwt.verify(token, privateKey);
     const user: any = await Users.findByPk(id);
-
     if (!user) {
       return res.status(401).json({
         msg: "Token No Valido - Usuario no existe",
       });
     }
 
-    if (!user.estado) {
+    if (!user.estado_id) {
       return res.status(401).json({
         msg: "Token No Valido - Usuario desabilitado",
       });

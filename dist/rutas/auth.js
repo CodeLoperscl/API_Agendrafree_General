@@ -4,5 +4,6 @@ const express_1 = require("express");
 const auth_1 = require("../controllers/auth");
 const route = (0, express_1.Router)();
 route.post("/login", auth_1.login);
+// route.post("/visita",generarTokenVisita);
 exports.default = route;
 //# sourceMappingURL=auth.js.map

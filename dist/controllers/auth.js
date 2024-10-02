@@ -43,7 +43,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         // Generar token y responder al cliente
         const { id } = user;
-        const name = user.user_name;
+        const name = user.username;
         const payload = { name, id };
         const token = yield (0, generarJWT_1.generarjwt)(payload);
         res.json({

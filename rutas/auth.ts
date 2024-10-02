@@ -1,8 +1,11 @@
 import { Router } from "express";
-import { login } from "../controllers/auth";
+import { 
+    // generarTokenVisita, 
+    login } from "../controllers/auth";
 
 const route = Router();
 
 route.post("/login", login);
+// route.post("/visita",generarTokenVisita);
 
 export default route;

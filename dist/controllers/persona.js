@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postPersona = exports.getPersona_rut = exports.getPersona = exports.getPersonas = void 0;
+exports.deletePersona = exports.putPersona = exports.postPersona = exports.getPersona_rut = exports.getPersona = exports.getPersonas = void 0;
 const persona_1 = __importDefault(require("../models/persona"));
 const axios_1 = __importDefault(require("axios"));
 const nacionalidad_1 = __importDefault(require("../models/nacionalidad"));
@@ -130,7 +130,7 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const persona = yield persona_1.default.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id });
         // Hacer la solicitud POST a la otra API para crear el paciente en el proyecto "especialista"
         const pacienteData = {
-            persona_id: usuario_id, // ID de la persona recién creada
+            persona_id: persona.id, // ID de la persona recién creada
             prevision_id: 1,
             estado_id: 1,
         };
@@ -169,114 +169,38 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.postPersona = postPersona;
-// export const postPersona = async (req: Request, res: Response) => {
-//   const { body } = req;
-//   const { nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id } = body;
-//   try {
-//     const existePersona = await Persona.findOne({
-//       where: { rut },
-//     });
-//     if (existePersona) {
-//       return res.status(400).json({
-//         msg: "Ya existe un paciente con este rut " + rut,
-//       });
-//     }
-//     const existePersona2 = await Persona.findOne({
-//       where: { email },
-//     });
-//     if (existePersona2) {
-//       return res.status(400).json({
-//         msg: "Ya existe un paciente con este email " + email,
-//       });
-//     }
-//     const{id}:any = await crearUsuario(rut);
-//     if(!id){
-//       return res.status(400).json({
-//         msg: "Ya existe un usuario con este rut " + rut,
-//       });
-//     }
-//     console.log("idUsuario = ", id);
-//     // Crear paciente en la base de datos
-//     const paciente = await Persona.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id: id });
-//     // Configurar el mensaje de bienvenida
-//     const emailContent = `
-//       <h1>Bienvenido a nuestra clínica, ${nombre} ${apellido}!</h1>
-//       <p>Gracias por registrarte. Aquí tienes un resumen de tus datos:</p>
-//       <ul>
-//         <li><strong>Nombre:</strong> ${nombre}</li>
-//         <li><strong>Apellido:</strong> ${apellido}</li>
-//         <li><strong>RUT:</strong> ${rut}</li>
-//         <li><strong>Email:</strong> ${email}</li>
-//         <li><strong>Teléfono:</strong> ${fono}</li>
-//       </ul>
-//     `;
-//     // Enviar el correo electrónico
-//     await transporter.sendMail(
-//       mailOptions(email, 'Bienvenido a nuestra clínica', emailContent)
-//     );
-//     // Responder con los datos del paciente creado
-//     res.json({paciente, id});
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({
-//       msg: "Hable con el administrador",
-//     });
-//   }
-// };
-//SIN USO DE CORREO
-// export const postPersona = async (req: Request, res: Response) => {
-//   const { body } = req;
-//   const { nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id } = body;
-//   try {
-//     const existePersona = await Persona.findOne({
-//       where: {
-//         rut,
-//       },
-//     });
-//     if (existePersona) {
-//       return res.status(400).json({
-//         msg: "Ya existe una paciente con este rut " + rut,
-//       });
-//     }
-//     const paciente = await Persona.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id });
-//     // res.json(psswd);
-//     res.json(paciente);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({
-//       msg: "Hable con el administrador",
-//     });
-//   }
-// };
-// export const putPersona = async (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   const { body } = req;
-//   try {
-//     const paciente = await Persona.findByPk(id);
-//     if (!paciente) {
-//       return res.status(404).json({
-//         msg: "No existe una paciente con el id " + id,
-//       });
-//     }
-//     await paciente.update(body);
-//     res.json(paciente);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({
-//       msg: "Hable con el administrador",
-//     });
-//   }
-// };
-// export const deletePersona = async (req: Request, res: Response) => {
-//   const { id } = req.params;
-//   const paciente = await Persona.findByPk(id);
-//   if (!paciente) {
-//   return res.status(404).json({
-//       msg: "No existe una paciente con el id " + id,
-//   });
-//   }
-//   await paciente.update({ estado_id: 2 });
-// // await estado_usuario.destroy();
-//   res.json(paciente);
-// };
+const putPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { body } = req;
+    try {
+        const paciente = yield persona_1.default.findByPk(id);
+        if (!paciente) {
+            return res.status(404).json({
+                msg: "No existe una paciente con el id " + id,
+            });
+        }
+        yield paciente.update(body);
+        res.json(paciente);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: "Hable con el administrador",
+        });
+    }
+});
+exports.putPersona = putPersona;
+const deletePersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const paciente = yield persona_1.default.findByPk(id);
+    if (!paciente) {
+        return res.status(404).json({
+            msg: "No existe una paciente con el id " + id,
+        });
+    }
+    yield paciente.update({ estado_id: 2 });
+    // await estado_usuario.destroy();
+    res.json(paciente);
+});
+exports.deletePersona = deletePersona;
 //# sourceMappingURL=persona.js.map
