@@ -18,9 +18,13 @@ interface Paciente {
 }
 
 // Función para obtener los datos de una paciente
-async function data_paciente(url: string): Promise<Paciente> {
+async function data_paciente(url: string, token: any): Promise<Paciente> {
   try {
-    const { data: paciente } = await axios.get(url);
+    const { data: paciente } = await axios.get(url, {
+      headers: {
+        'x-token': token
+      }
+    });
     return paciente;
   } catch (error) {
     console.error(`Error fetching data from ${url}:`, error);
@@ -82,6 +86,7 @@ export const getPersona = async (req: Request, res: Response) => {
 
 export const getPersona_rut = async (req: Request, res: Response) => {
   try {
+    const token = req.headers['x-token'];
   const { rut }: any = req.params;
   const persona: any = await Persona.findOne({
     where: { rut },
@@ -95,7 +100,8 @@ export const getPersona_rut = async (req: Request, res: Response) => {
   }
 
   const paciente = await data_paciente(
-    `${process.env.API_URL}paciente/persona/${persona.id}`  // AGREGAR RUTA Y METODO
+    `${process.env.API_URL}paciente/persona/${persona.id}`,   // AGREGAR RUTA Y METODO
+    token
   );
 
   return res.json({ persona, paciente});

@@ -20,10 +20,14 @@ const usuario_1 = __importDefault(require("../models/usuario"));
 const generarCorreo_1 = require("../helpers/generarCorreo"); //importamos la funcion de helper
 const usuarios_1 = require("./usuarios");
 // Función para obtener los datos de una paciente
-function data_paciente(url) {
+function data_paciente(url, token) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { data: paciente } = yield axios_1.default.get(url);
+            const { data: paciente } = yield axios_1.default.get(url, {
+                headers: {
+                    'x-token': token
+                }
+            });
             return paciente;
         }
         catch (error) {
@@ -84,6 +88,7 @@ const getPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.getPersona = getPersona;
 const getPersona_rut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const token = req.headers['x-token'];
         const { rut } = req.params;
         const persona = yield persona_1.default.findOne({
             where: { rut },
@@ -94,8 +99,8 @@ const getPersona_rut = (req, res) => __awaiter(void 0, void 0, void 0, function*
                 msg: `No existe una persona con la rut ${rut}`,
             });
         }
-        const paciente = yield data_paciente(`${process.env.API_URL}paciente/persona/${persona.id}` // AGREGAR RUTA Y METODO
-        );
+        const paciente = yield data_paciente(`${process.env.API_URL}paciente/persona/${persona.id}`, // AGREGAR RUTA Y METODO
+        token);
         return res.json({ persona, paciente });
     }
     catch (error) {

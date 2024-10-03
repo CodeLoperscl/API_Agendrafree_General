@@ -10,3 +10,5 @@ export const generarCorreo = async (destinatario: string, asunto: string, cuerpo
     throw new Error('Error enviando correo');
   }
 };
+
+
