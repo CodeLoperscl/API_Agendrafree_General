@@ -29,10 +29,8 @@ export const getNacionalidad = async (req: Request, res: Response) => {
     }
 };
 
-
 export const postNacionalidad = async (req: Request, res: Response) => {
-    const { body } = req;
-    const { nombre } = body;
+    const { nombre } = req.body;
     try {
         const existeNacionalidad = await Nacionalidades.findOne({
             where: {
@@ -46,7 +44,7 @@ export const postNacionalidad = async (req: Request, res: Response) => {
             });
         }
 
-        const nacionalidad = await Nacionalidades.create({ nombre});
+        const nacionalidad = await Nacionalidades.create({ nombre, estado_id: 1});
         res.json(nacionalidad);
         
     } catch (error) {

@@ -38,8 +38,7 @@ const getNacionalidad = (req, res) => __awaiter(void 0, void 0, void 0, function
 });
 exports.getNacionalidad = getNacionalidad;
 const postNacionalidad = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { body } = req;
-    const { nombre } = body;
+    const { nombre } = req.body;
     try {
         const existeNacionalidad = yield nacionalidad_1.default.findOne({
             where: {
@@ -51,7 +50,7 @@ const postNacionalidad = (req, res) => __awaiter(void 0, void 0, void 0, functio
                 msg: "Ya existe un nacionalidad " + nombre,
             });
         }
-        const nacionalidad = yield nacionalidad_1.default.create({ nombre });
+        const nacionalidad = yield nacionalidad_1.default.create({ nombre, estado_id: 1 });
         res.json(nacionalidad);
     }
     catch (error) {
