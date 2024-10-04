@@ -53,8 +53,7 @@ exports.getProfesional = getProfesional;
 //     }
 // };
 const postProfesional = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { body } = req;
-    const { persona_id, habilitado, ruta_api } = body;
+    const { persona_id, ruta_api, max_dias_atencion } = req.body;
     try {
         const existeProfesional = yield profesional_1.default.findOne({
             where: {
@@ -66,7 +65,7 @@ const postProfesional = (req, res) => __awaiter(void 0, void 0, void 0, function
                 msg: "Ya existe una profesional con este persona id: " + persona_id,
             });
         }
-        const profesional = yield profesional_1.default.create({ persona_id, habilitado, ruta_api });
+        const profesional = yield profesional_1.default.create({ persona_id, habilitado: true, ruta_api, max_dias_atencion });
         // res.json(psswd);
         res.json(profesional);
     }
@@ -107,7 +106,7 @@ const deleteProfesional = (req, res) => __awaiter(void 0, void 0, void 0, functi
             msg: "No existe una profesional con el id " + id,
         });
     }
-    yield profesional.update({ estado_id: false });
+    yield profesional.update({ habilitado: false });
     // await estado_usuario.destroy();
     res.json(profesional);
 });

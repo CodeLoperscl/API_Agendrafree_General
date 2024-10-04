@@ -42,8 +42,7 @@ export const getProfesional = async (req: Request, res: Response) => {
 // };
 
 export const postProfesional = async (req: Request, res: Response) => {
-    const { body } = req;
-    const { persona_id, habilitado, ruta_api } = body;
+    const { persona_id, ruta_api, max_dias_atencion } = req.body;
     try {
         const existeProfesional = await Profesional.findOne({
             where: {
@@ -57,7 +56,7 @@ export const postProfesional = async (req: Request, res: Response) => {
             });
         }
 
-        const profesional = await Profesional.create({persona_id, habilitado, ruta_api});
+        const profesional = await Profesional.create({persona_id, habilitado: true, ruta_api, max_dias_atencion});
 
         // res.json(psswd);
         res.json(profesional);
@@ -100,7 +99,7 @@ export const deleteProfesional = async (req: Request, res: Response) => {
             msg: "No existe una profesional con el id " + id,
         });
     }
-    await profesional.update({ estado_id: false });
+    await profesional.update({ habilitado: false });
     // await estado_usuario.destroy();
     res.json(profesional);
 };
