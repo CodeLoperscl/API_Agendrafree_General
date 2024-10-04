@@ -33,6 +33,7 @@ const crearUsuario = (username) => __awaiter(void 0, void 0, void 0, function* (
     const salto = bcryptjs_1.default.genSaltSync();
     const psswd = bcryptjs_1.default.hashSync(shortUuid, salto);
     const usuario = yield usuario_1.default.create({ uid: shortUuid, username, password: psswd });
+    console.log(usuario);
     return usuario;
 });
 exports.crearUsuario = crearUsuario;

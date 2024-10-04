@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 export const generarjwt = (uid: any) => {
   let expira = "1d"; 
   if(uid.name == "visita"){
-    expira = "1h";
+    expira = "2h";
   }
   const privateKey: any = process.env.SECRETORPRIVATEKEY;
   return new Promise((resolve, reject) => {

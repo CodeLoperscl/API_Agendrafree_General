@@ -25,6 +25,7 @@ export const crearUsuario = async(username:string) => {
       const psswd = bcryptjs.hashSync(shortUuid, salto);
   
       const usuario = await Users.create({ uid: shortUuid , username, password: psswd });
+      console.log(usuario);
       return usuario;
 
 }

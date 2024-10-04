@@ -8,7 +8,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const generarjwt = (uid) => {
     let expira = "1d";
     if (uid.name == "visita") {
-        expira = "1h";
+        expira = "2h";
     }
     const privateKey = process.env.SECRETORPRIVATEKEY;
     return new Promise((resolve, reject) => {

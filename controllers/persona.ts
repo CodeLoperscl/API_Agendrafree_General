@@ -6,31 +6,8 @@ import Users from "../models/usuario";
 import { generarCorreo } from "../helpers/generarCorreo"; //importamos la funcion de helper
 import { Op } from "sequelize";
 import { crearUsuario } from "./usuarios";
+import { crearPaciente, obtenerDatosPaciente, getToken, obtenerPacientePorPersonaId } from "../helpers/personaHelpers"; // Importar las funciones de helpers
 
-// import Estados from "../models/estado";
-
-// Definición de la interfaz Paciente
-interface Paciente {
-  id: number;
-  persona_id: number;
-  prevision_id: number;
-  estado_id: number;
-}
-
-// Función para obtener los datos de una paciente
-async function data_paciente(url: string, token: any): Promise<Paciente> {
-  try {
-    const { data: paciente } = await axios.get(url, {
-      headers: {
-        'x-token': token
-      }
-    });
-    return paciente;
-  } catch (error) {
-    console.error(`Error fetching data from ${url}:`, error);
-    throw error;
-  }
-}
 
 // Controlador para obtener todos los especialistas
 export const getPersonas = async (req: Request, res: Response) => {
@@ -56,7 +33,7 @@ export const getPersonas = async (req: Request, res: Response) => {
 export const getPersona = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    
+
     // Obtener una persona por su ID, excluyendo 'password' de Users
     const persona = await Persona.findByPk(id, {
       include: [
@@ -86,49 +63,48 @@ export const getPersona = async (req: Request, res: Response) => {
 
 export const getPersona_rut = async (req: Request, res: Response) => {
   try {
-    const token = req.headers['x-token'];
-  const { rut }: any = req.params;
-  const persona: any = await Persona.findOne({
-    where: { rut },
-    include: [Nacionalidades, Users]
-  });
+    const sendToken = getToken(req); // Obtener el token del request
+    const { rut } = req.params;
 
-  if (!persona) {
-    return res.status(404).json({
-      msg: `No existe una persona con la rut ${rut}`,
+    // Obtener los datos de la persona en la base de datos general
+    const persona: any = await Persona.findOne({
+      where: { rut },
+      include: [Nacionalidades, Users],
     });
-  }
 
-  const paciente = await data_paciente(
-    `${process.env.API_URL}paciente/persona/${persona.id}`,   // AGREGAR RUTA Y METODO
-    token
-  );
+    if (!persona) {
+      return res.status(404).json({
+        msg: `No existe una persona con la rut ${rut}`,
+      });
+    }
 
-  return res.json({ persona, paciente});
+    // Obtener los datos del paciente asociado a la persona
+    const pacienteData = await obtenerPacientePorPersonaId(persona.id, sendToken || '');
 
-  }catch (error: any) {
+    return res.json({ persona, paciente: pacienteData });
+
+  } catch (error: any) {
     console.error("Error fetching Persona:", error);
     return res.status(500).json({
-      msg: "Error al obtener la Persona",
+      msg: "Error al obtener el paciente",
       error: error.message,
     });
   }
 };
 
 export const postPersona = async (req: Request, res: Response) => {
-  const { body } = req;
-  const { nombre, apellido, rut, email, fono, nacionalidad_id, prevision_id, estado_id } = body;
+  const { nombre, apellido, rut, email, fono, nacionalidad_id, prevision_id, estado_id } = req.body;
 
   try {
     // Verificar si ya existe una persona con el mismo RUT o correo
     const existePersona = await Persona.findOne({ where: { rut } });
     if (existePersona) {
-      return res.status(400).json({ msg: "Ya existe un paciente con este rut " + rut });
+      return res.status(400).json({ msg: "Ya existe una persona con este rut " + rut });
     }
 
     const existePersona2 = await Persona.findOne({ where: { email } });
     if (existePersona2) {
-      return res.status(400).json({ msg: "Ya existe un paciente con este email " + email });
+      return res.status(400).json({ msg: "Ya existe una persona con este email " + email });
     }
 
     // Crear un usuario asociado a la persona
@@ -137,52 +113,43 @@ export const postPersona = async (req: Request, res: Response) => {
       return res.status(400).json({ msg: "Error al crear el usuario con este rut " + rut });
     }
 
-    console.log("idUsuario = ", usuario_id);
-
     // Crear persona en la base de datos "general"
     const persona: any = await Persona.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id });
 
-    // Hacer la solicitud POST a la otra API para crear el paciente en el proyecto "especialista"
-    const pacienteData = {
-      persona_id: persona.id, // ID de la persona recién creada
-      prevision_id: 1,
-      estado_id: 1,
-    };
+    // Obtener el token del header
+    const token = getToken(req);
 
-    // URL de la API del proyecto especialista
-    const apiEspecialistaUrl = `${process.env.API_URL}paciente`;
-    console.log('URL del API especialista:', apiEspecialistaUrl);
-
-
+    // Crear el paciente en la base de datos del especialista
     try {
-      // Realizar el POST request para crear al paciente en la otra base de datos
-      const { data: paciente } = await axios.post(apiEspecialistaUrl, pacienteData);
-
+      const url = 'http://localhost:8001/api/paciente'; // Asegurarse de que la URL esté bien formada
+      const paciente = await crearPaciente(persona.id, prevision_id, estado_id, token || '', url);
       console.log("Paciente creado en la base de datos especialista:", paciente);
 
+      // Configurar el mensaje de bienvenida
+      const emailContent = `
+      <h1>Bienvenido a nuestra clínica, ${nombre} ${apellido}!</h1>
+      <p>Gracias por registrarte. Aquí tienes un resumen de tus datos:</p>
+      <ul>
+        <li><strong>Nombre:</strong> ${nombre}</li>
+        <li><strong>Apellido:</strong> ${apellido}</li>
+        <li><strong>RUT:</strong> ${rut}</li>
+        <li><strong>Email:</strong> ${email}</li>
+        <li><strong>Teléfono:</strong> ${fono}</li>
+      </ul>
+      `;
+
+      // Usar la función generarCorreo para enviar el email
+      await generarCorreo(email, 'Bienvenido a nuestra clínica', emailContent);
+      console.log(paciente);
       // Responder con los datos del persona creada y el paciente asociado
       res.json({ persona, paciente });
-      
     } catch (error) {
       console.error("Error creando paciente en el proyecto especialista:", error);
-      return res.status(500).json({ msg: "Error al crear el paciente en la base de datos especialista" });
+      return res.status(500).json({ 
+        msg: "Error al crear el paciente en la base de datos especialista",
+        error: (error as Error).message, // Proporcionar más detalles del error
+      });
     }
-
-    // Configurar el mensaje de bienvenida
-    const emailContent = `
-    <h1>Bienvenido a nuestra clínica, ${nombre} ${apellido}!</h1>
-    <p>Gracias por registrarte. Aquí tienes un resumen de tus datos:</p>
-    <ul>
-      <li><strong>Nombre:</strong> ${nombre}</li>
-      <li><strong>Apellido:</strong> ${apellido}</li>
-      <li><strong>RUT:</strong> ${rut}</li>
-      <li><strong>Email:</strong> ${email}</li>
-      <li><strong>Teléfono:</strong> ${fono}</li>
-    </ul>
-  `;
-
-    // Usar la función generarCorreo para enviar el email
-    await generarCorreo(email, 'Bienvenido a nuestra clínica', emailContent);
 
   } catch (error) {
     console.log(error);
@@ -217,12 +184,12 @@ export const deletePersona = async (req: Request, res: Response) => {
   const { id } = req.params;
   const paciente = await Persona.findByPk(id);
   if (!paciente) {
-  return res.status(404).json({
+    return res.status(404).json({
       msg: "No existe una paciente con el id " + id,
-  });
+    });
   }
   await paciente.update({ estado_id: 2 });
-// await estado_usuario.destroy();
+  // await estado_usuario.destroy();
   res.json(paciente);
 };
 

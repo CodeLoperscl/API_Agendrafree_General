@@ -14,28 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePersona = exports.putPersona = exports.postPersona = exports.getPersona_rut = exports.getPersona = exports.getPersonas = void 0;
 const persona_1 = __importDefault(require("../models/persona"));
-const axios_1 = __importDefault(require("axios"));
 const nacionalidad_1 = __importDefault(require("../models/nacionalidad"));
 const usuario_1 = __importDefault(require("../models/usuario"));
 const generarCorreo_1 = require("../helpers/generarCorreo"); //importamos la funcion de helper
 const usuarios_1 = require("./usuarios");
-// Función para obtener los datos de una paciente
-function data_paciente(url, token) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const { data: paciente } = yield axios_1.default.get(url, {
-                headers: {
-                    'x-token': token
-                }
-            });
-            return paciente;
-        }
-        catch (error) {
-            console.error(`Error fetching data from ${url}:`, error);
-            throw error;
-        }
-    });
-}
+const personaHelpers_1 = require("../helpers/personaHelpers"); // Importar las funciones de helpers
 // Controlador para obtener todos los especialistas
 const getPersonas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -88,85 +71,82 @@ const getPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.getPersona = getPersona;
 const getPersona_rut = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const token = req.headers['x-token'];
+        const sendToken = (0, personaHelpers_1.getToken)(req); // Obtener el token del request
         const { rut } = req.params;
+        // Obtener los datos de la persona en la base de datos general
         const persona = yield persona_1.default.findOne({
             where: { rut },
-            include: [nacionalidad_1.default, usuario_1.default]
+            include: [nacionalidad_1.default, usuario_1.default],
         });
         if (!persona) {
             return res.status(404).json({
                 msg: `No existe una persona con la rut ${rut}`,
             });
         }
-        const paciente = yield data_paciente(`${process.env.API_URL}paciente/persona/${persona.id}`, // AGREGAR RUTA Y METODO
-        token);
-        return res.json({ persona, paciente });
+        // Obtener los datos del paciente asociado a la persona
+        const pacienteData = yield (0, personaHelpers_1.obtenerPacientePorPersonaId)(persona.id, sendToken || '');
+        return res.json({ persona, paciente: pacienteData });
     }
     catch (error) {
         console.error("Error fetching Persona:", error);
         return res.status(500).json({
-            msg: "Error al obtener la Persona",
+            msg: "Error al obtener el paciente",
             error: error.message,
         });
     }
 });
 exports.getPersona_rut = getPersona_rut;
 const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { body } = req;
-    const { nombre, apellido, rut, email, fono, nacionalidad_id, prevision_id, estado_id } = body;
+    const { nombre, apellido, rut, email, fono, nacionalidad_id, prevision_id, estado_id } = req.body;
     try {
         // Verificar si ya existe una persona con el mismo RUT o correo
         const existePersona = yield persona_1.default.findOne({ where: { rut } });
         if (existePersona) {
-            return res.status(400).json({ msg: "Ya existe un paciente con este rut " + rut });
+            return res.status(400).json({ msg: "Ya existe una persona con este rut " + rut });
         }
         const existePersona2 = yield persona_1.default.findOne({ where: { email } });
         if (existePersona2) {
-            return res.status(400).json({ msg: "Ya existe un paciente con este email " + email });
+            return res.status(400).json({ msg: "Ya existe una persona con este email " + email });
         }
         // Crear un usuario asociado a la persona
         const { id: usuario_id } = yield (0, usuarios_1.crearUsuario)(rut);
         if (!usuario_id) {
             return res.status(400).json({ msg: "Error al crear el usuario con este rut " + rut });
         }
-        console.log("idUsuario = ", usuario_id);
         // Crear persona en la base de datos "general"
         const persona = yield persona_1.default.create({ nombre, apellido, rut, email, fono, nacionalidad_id, usuario_id });
-        // Hacer la solicitud POST a la otra API para crear el paciente en el proyecto "especialista"
-        const pacienteData = {
-            persona_id: persona.id, // ID de la persona recién creada
-            prevision_id: 1,
-            estado_id: 1,
-        };
-        // URL de la API del proyecto especialista
-        const apiEspecialistaUrl = `${process.env.API_URL}paciente`;
-        console.log('URL del API especialista:', apiEspecialistaUrl);
+        // Obtener el token del header
+        const token = (0, personaHelpers_1.getToken)(req);
+        // Crear el paciente en la base de datos del especialista
         try {
-            // Realizar el POST request para crear al paciente en la otra base de datos
-            const { data: paciente } = yield axios_1.default.post(apiEspecialistaUrl, pacienteData);
+            const url = 'http://localhost:8001/api/paciente'; // Asegurarse de que la URL esté bien formada
+            const paciente = yield (0, personaHelpers_1.crearPaciente)(persona.id, prevision_id, estado_id, token || '', url);
             console.log("Paciente creado en la base de datos especialista:", paciente);
+            // Configurar el mensaje de bienvenida
+            const emailContent = `
+      <h1>Bienvenido a nuestra clínica, ${nombre} ${apellido}!</h1>
+      <p>Gracias por registrarte. Aquí tienes un resumen de tus datos:</p>
+      <ul>
+        <li><strong>Nombre:</strong> ${nombre}</li>
+        <li><strong>Apellido:</strong> ${apellido}</li>
+        <li><strong>RUT:</strong> ${rut}</li>
+        <li><strong>Email:</strong> ${email}</li>
+        <li><strong>Teléfono:</strong> ${fono}</li>
+      </ul>
+      `;
+            // Usar la función generarCorreo para enviar el email
+            yield (0, generarCorreo_1.generarCorreo)(email, 'Bienvenido a nuestra clínica', emailContent);
+            console.log(paciente);
             // Responder con los datos del persona creada y el paciente asociado
             res.json({ persona, paciente });
         }
         catch (error) {
             console.error("Error creando paciente en el proyecto especialista:", error);
-            return res.status(500).json({ msg: "Error al crear el paciente en la base de datos especialista" });
+            return res.status(500).json({
+                msg: "Error al crear el paciente en la base de datos especialista",
+                error: error.message, // Proporcionar más detalles del error
+            });
         }
-        // Configurar el mensaje de bienvenida
-        const emailContent = `
-    <h1>Bienvenido a nuestra clínica, ${nombre} ${apellido}!</h1>
-    <p>Gracias por registrarte. Aquí tienes un resumen de tus datos:</p>
-    <ul>
-      <li><strong>Nombre:</strong> ${nombre}</li>
-      <li><strong>Apellido:</strong> ${apellido}</li>
-      <li><strong>RUT:</strong> ${rut}</li>
-      <li><strong>Email:</strong> ${email}</li>
-      <li><strong>Teléfono:</strong> ${fono}</li>
-    </ul>
-  `;
-        // Usar la función generarCorreo para enviar el email
-        yield (0, generarCorreo_1.generarCorreo)(email, 'Bienvenido a nuestra clínica', emailContent);
     }
     catch (error) {
         console.log(error);
