@@ -9,6 +9,6 @@ route.get("/rut/:rut", [validarToken_1.validarjwt], persona_1.getPersona_rut);
 route.get("/:id", [validarToken_1.validarjwt], persona_1.getPersona);
 route.post("/", [validarToken_1.validarjwt], persona_1.postPersona);
 route.put("/:id", [validarToken_1.validarjwt], persona_1.putPersona);
-route.delete("/:id", [validarToken_1.validarjwt], persona_1.deletePersona);
+// route.delete("/:id",[validarjwt], deletePersona);
 exports.default = route;
 //# sourceMappingURL=persona.js.map

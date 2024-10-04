@@ -9,6 +9,6 @@ route.get("/rut/:rut",[validarjwt],getPersona_rut);
 route.get("/:id",[validarjwt], getPersona);
 route.post("/",[validarjwt], postPersona);
 route.put("/:id",[validarjwt], putPersona);
-route.delete("/:id",[validarjwt], deletePersona);
+// route.delete("/:id",[validarjwt], deletePersona);
 
 export default route;
