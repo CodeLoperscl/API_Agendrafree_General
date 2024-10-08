@@ -119,7 +119,7 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const token = (0, personaHelpers_1.getToken)(req);
         // Crear el paciente en la base de datos del especialista
         try {
-            const url = 'http://localhost:8001/api/paciente'; // Asegurarse de que la URL esté bien formada
+            const url = `${process.env.API_URL}paciente`; // Asegurarse de que la URL esté bien formada
             const paciente = yield (0, personaHelpers_1.crearPaciente)(persona.id, prevision_id, estado_id, token || '', url);
             console.log("Paciente creado en la base de datos especialista:", paciente);
             // Configurar el mensaje de bienvenida
@@ -134,9 +134,11 @@ const postPersona = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         <li><strong>Teléfono:</strong> ${fono}</li>
       </ul>
       `;
-            // Usar la función generarCorreo para enviar el email
-            yield (0, generarCorreo_1.generarCorreo)(email, 'Bienvenido a nuestra clínica', emailContent);
-            console.log(paciente);
+            if (email) { //Verifica si el email enviado por body es distinto a null
+                // Usar la función generarCorreo para enviar el email
+                yield (0, generarCorreo_1.generarCorreo)(email, 'Bienvenido a nuestra clínica', emailContent);
+                console.log(paciente);
+            }
             // Responder con los datos del persona creada y el paciente asociado
             res.json({ persona, paciente });
         }

@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';//LIBRERIA UUID
 
 export const crearUsuario = async(username:string) => {
   const uuid = uuidv4();
-  const shortUuid = uuid.slice(0, 8);   // Limitar el UUID a los primeros 5 caracteres
+  const shortUuid = uuid.slice(0, 8);   // Limitar el UUID a los primeros 8 caracteres
 
       const existeUsuario = await Users.findOne({
         where: {

@@ -21,7 +21,7 @@ const profesional_1 = __importDefault(require("../models/profesional"));
 const uuid_1 = require("uuid"); //LIBRERIA UUID
 const crearUsuario = (username) => __awaiter(void 0, void 0, void 0, function* () {
     const uuid = (0, uuid_1.v4)();
-    const shortUuid = uuid.slice(0, 8); // Limitar el UUID a los primeros 5 caracteres
+    const shortUuid = uuid.slice(0, 8); // Limitar el UUID a los primeros 8 caracteres
     const existeUsuario = yield usuario_1.default.findOne({
         where: {
             username,
