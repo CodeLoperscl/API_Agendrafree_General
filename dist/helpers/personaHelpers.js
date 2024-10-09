@@ -12,13 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.obtenerPacientePorPersonaId = exports.obtenerDatosPaciente = exports.crearPaciente = void 0;
-exports.getToken = getToken;
+exports.obtenerPacientePorPersonaId = exports.obtenerDatosPaciente = exports.crearPaciente = exports.getToken = void 0;
 const axios_1 = __importDefault(require("axios"));
 // Función para obtener el token del header
 function getToken(req) {
     return req.header("x-token");
 }
+exports.getToken = getToken;
 // Función para crear un paciente en el sistema especialista
 const crearPaciente = (persona_id, prevision_id, estado_id, token, url) => __awaiter(void 0, void 0, void 0, function* () {
     try {

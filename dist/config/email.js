@@ -23,11 +23,11 @@ exports.mailOptions = exports.transporter = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 // Configurar el servicio de correo usando los datos de NinjaHosting
 exports.transporter = nodemailer_1.default.createTransport({
-    host: 'mail.agendafree.cl', // Servidor SMTP de NinjaHosting
-    port: 587, // Puerto para conexión TLS
-    secure: false, // true para 465, false para otros puertos como 587
+    host: 'mail.agendafree.cl',
+    port: 587,
+    secure: false,
     auth: {
-        user: 'info@agendafree.cl', // Correo de NinjaHosting
+        user: 'info@agendafree.cl',
         pass: process.env.EMAIL_PASS, // La contraseña
     },
     tls: {
@@ -36,7 +36,7 @@ exports.transporter = nodemailer_1.default.createTransport({
 });
 // Opciones predeterminadas para el correo electrónico
 const mailOptions = (to, subject, html) => ({
-    from: 'info@agendafree.cl', // El correo remitente
+    from: 'info@agendafree.cl',
     to,
     subject,
     html,
