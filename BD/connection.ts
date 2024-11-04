@@ -11,7 +11,7 @@ import { Sequelize } from "sequelize";
 
 
 // BD conectada a railway
-let DB_PACIENTE = "agendafree_bd";
+let DB_PACIENTE = "agendafreev2_bd";
 let USERNAME_DB_PACIENTE =  "root";
 let PASSWORD_DB_PACIENTE = "";
 let HOST_DB_PACIENTE = "localhost";
